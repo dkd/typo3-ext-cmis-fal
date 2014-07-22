@@ -1,0 +1,24 @@
+{
+  "linters": {
+    "JavaScript Linter": {
+      "type": "jshint",
+      "include": "(\\.js$)"
+    },
+    "Merge Conflict detection": {
+      "type": "merge-conflict"
+    },
+    "PHP Codesniffer": {
+      "type": "phpcs",
+      "bin": "vendor/bin/phpcs",
+      "flags": ["--standard=TYPO3CMS"],
+      "include": "(\\.php$)"
+    },
+    "English spelling": {
+      "type": "spelling"
+    },
+    "Basic text linter for line length, encoding, trailing whitespace ...": {
+      "type": "text",
+      "exclude": "(^composer.lock$)"
+    }
+  }
+}
