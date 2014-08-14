@@ -11,14 +11,17 @@
       "type": "phpcs",
       "bin": "vendor/bin/phpcs",
       "flags": ["--standard=TYPO3CMS"],
-      "include": "(\\.php$)"
+      "include": "(\\.php$)",
+      "severity": {
+        "PHPCS.E.TYPO3SniffPool.Files.FileExtension.WrongFileExtension": "disabled"
+      }
     },
     "English spelling": {
       "type": "spelling"
     },
     "Basic text linter for line length, encoding, trailing whitespace ...": {
       "type": "text",
-      "exclude": "(^composer.lock$)"
+      "exclude": "(^composer.lock$|.php$)"
     }
   }
 }
