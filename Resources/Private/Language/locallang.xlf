@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<xliff version="1.0">
+    <file source-language="en" datatype="plaintext" original="messages" product-name="cmis_fal" date="2015-03-17T14:38:32+01:00">
+        <header/>
+        <body>
+            <trans-unit id="flexform_repository">
+                <source>Repository to use as storage</source>
+            </trans-unit>
+            <trans-unit id="flexform_folder">
+                <source>Repository folder to use as storage</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<T3DataStructure>
+    <meta>
+        <langDisable>1</langDisable>
+    </meta>
+    <ROOT>
+        <type>array</type>
+        <el>
+            <repository>
+                <TCEforms>
+                    <label>LLL:EXT:cmis_fal/Resources/Private/Language/locallang.xlf:flexform_repository</label>
+                    <config>
+                        <type>select</type>
+                        <itemsProcFunc>Dkd\CmisFal\UserFunction\RepositorySelectorFiller->processItems</itemsProcFunc>
+                        <items></items>
+                    </config>
+                </TCEforms>
+            </repository>
+        </el>
+    </ROOT>
+</T3DataStructure>

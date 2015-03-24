@@ -17,6 +17,10 @@
             "role": "Developer"
         }
     ],
+    "require": {
+        "dkd/cmis-service": "dev-master",
+        "typo3/cms": ">=6.2.11"
+    },
     "require-dev": {
         "squizlabs/php_codesniffer": "1.*",
         "phpunit/phpunit": "4.1.*",
