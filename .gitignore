@@ -1,1 +1,5 @@
 vendor
+.idea
+index.php
+typo3
+typo3_src
