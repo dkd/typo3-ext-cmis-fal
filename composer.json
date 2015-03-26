@@ -20,11 +20,23 @@
     "require": {
         "dkd/cmis-service": "dev-master"
     },
+    "autoload": {
+        "psr-4": {
+            "Dkd\\CmisFal\\": "Classes/"
+        }
+    },
     "require-dev": {
+        "dkd/php-cmis": "dev-master",
         "typo3/cms": ">=6.2.11",
         "squizlabs/php_codesniffer": "1.*",
         "phpunit/phpunit": "4.1.*",
         "typo3-ci/typo3sniffpool": "dev-master",
         "typo3-ci/typo3cms": "dev-master"
-    }
+    },
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/dkd/typo3-ext-cmis-service.git"
+        }
+    ]
 }

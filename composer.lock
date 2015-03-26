@@ -4,8 +4,62 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c6bf7a86bb44a5d8cf6d3facced9d088",
-    "packages": [],
+    "hash": "89b2a977ff18baca5fe379699447250f",
+    "packages": [
+        {
+            "name": "dkd/cmis-service",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dkd/typo3-ext-cmis-service.git",
+                "reference": "52837f064e4ab28247b755f0be3d62bed7cfc3ef"
+            },
+            "require-dev": {
+                "dkd/php-cmis": "dev-master",
+                "mikey179/vfsstream": "~1.3.0",
+                "phpunit/phpunit": "4.2.*",
+                "psr/log": "1.0.*@dev",
+                "squizlabs/php_codesniffer": "1.*",
+                "symfony/yaml": "~2.5.3",
+                "typo3-ci/typo3cms": "*",
+                "typo3-ci/typo3sniffpool": "*",
+                "typo3/cms": ">=6.2.11"
+            },
+            "type": "typo3-cms-extension",
+            "autoload": {
+                "psr-4": {
+                    "Dkd\\CmisService\\": "Classes/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Dkd\\CmisService\\Tests\\": "Tests/"
+                }
+            },
+            "license": [
+                "GPL-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Claus Due",
+                    "homepage": "http://www.dkd.de",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Sascha Egerer",
+                    "homepage": "http://www.dkd.de",
+                    "role": "Developer"
+                }
+            ],
+            "description": "TYPO3 Extension CMIS Service",
+            "homepage": "https://phabricator.dkd.de/diffusion/EXTCMISS/",
+            "keywords": [
+                "cmis",
+                "typo3"
+            ],
+            "time": "2015-03-26 14:29:23"
+        }
+    ],
     "packages-dev": [
         {
             "name": "dkd/enumeration",
@@ -61,12 +115,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dkd/php-cmis-client.git",
-                "reference": "63ae1545f0a2cf814c11e2df4f14930483ba28a1"
+                "reference": "a4924772fad5e3867fa527d3cf7f7871f9283f72"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dkd/php-cmis-client/zipball/63ae1545f0a2cf814c11e2df4f14930483ba28a1",
-                "reference": "63ae1545f0a2cf814c11e2df4f14930483ba28a1",
+                "url": "https://api.github.com/repos/dkd/php-cmis-client/zipball/a4924772fad5e3867fa527d3cf7f7871f9283f72",
+                "reference": "a4924772fad5e3867fa527d3cf7f7871f9283f72",
                 "shasum": ""
             },
             "require": {
@@ -108,7 +162,7 @@
             "keywords": [
                 "cmis"
             ],
-            "time": "2015-03-17 14:08:06"
+            "time": "2015-03-26 14:35:47"
         },
         {
             "name": "dkd/php-populate",
@@ -221,60 +275,6 @@
                 "caching"
             ],
             "time": "2015-01-15 20:38:55"
-        },
-        {
-            "name": "doctrine/instantiator",
-            "version": "1.0.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/doctrine/instantiator.git",
-                "reference": "f976e5de371104877ebc89bd8fecb0019ed9c119"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/f976e5de371104877ebc89bd8fecb0019ed9c119",
-                "reference": "f976e5de371104877ebc89bd8fecb0019ed9c119",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3,<8.0-DEV"
-            },
-            "require-dev": {
-                "athletic/athletic": "~0.1.8",
-                "ext-pdo": "*",
-                "ext-phar": "*",
-                "phpunit/phpunit": "~4.0",
-                "squizlabs/php_codesniffer": "2.0.*@ALPHA"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Doctrine\\Instantiator\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Marco Pivetta",
-                    "email": "ocramius@gmail.com",
-                    "homepage": "http://ocramius.github.com/"
-                }
-            ],
-            "description": "A small, lightweight utility to instantiate objects in PHP without invoking their constructors",
-            "homepage": "https://github.com/doctrine/instantiator",
-            "keywords": [
-                "constructor",
-                "instantiate"
-            ],
-            "time": "2014-10-13 12:58:55"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -437,22 +437,22 @@
         },
         {
             "name": "helhum/class-alias-loader",
-            "version": "1.0.0",
+            "version": "1.0.99",
             "source": {
                 "type": "git",
                 "url": "https://github.com/helhum/class-alias-loader.git",
-                "reference": "14073641d8d7859d08311bfcc3a5c19f3a40a6a3"
+                "reference": "486fea8c1fb7cd568c73a62a4add3a0a353827ca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/helhum/class-alias-loader/zipball/14073641d8d7859d08311bfcc3a5c19f3a40a6a3",
-                "reference": "14073641d8d7859d08311bfcc3a5c19f3a40a6a3",
+                "url": "https://api.github.com/repos/helhum/class-alias-loader/zipball/486fea8c1fb7cd568c73a62a4add3a0a353827ca",
+                "reference": "486fea8c1fb7cd568c73a62a4add3a0a353827ca",
                 "shasum": ""
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-master": "1.1.x-dev"
                 }
             },
             "autoload": {
@@ -478,20 +478,20 @@
                 "classloader",
                 "composer"
             ],
-            "time": "2015-02-02 18:32:18"
+            "time": "2015-03-22 20:28:13"
         },
         {
             "name": "league/url",
-            "version": "3.3.0",
+            "version": "3.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/url.git",
-                "reference": "1c1fb645b5a7de3d7e7bef07e203ec37f6b34847"
+                "reference": "a096be483bec9abcae34f4e21ec74696f7beed55"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/url/zipball/1c1fb645b5a7de3d7e7bef07e203ec37f6b34847",
-                "reference": "1c1fb645b5a7de3d7e7bef07e203ec37f6b34847",
+                "url": "https://api.github.com/repos/thephpleague/url/zipball/a096be483bec9abcae34f4e21ec74696f7beed55",
+                "reference": "a096be483bec9abcae34f4e21ec74696f7beed55",
                 "shasum": ""
             },
             "require": {
@@ -532,115 +532,7 @@
                 "php",
                 "url"
             ],
-            "time": "2015-03-20 08:35:10"
-        },
-        {
-            "name": "phpdocumentor/reflection-docblock",
-            "version": "2.0.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
-                "reference": "d68dbdc53dc358a816f00b300704702b2eaff7b8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/d68dbdc53dc358a816f00b300704702b2eaff7b8",
-                "reference": "d68dbdc53dc358a816f00b300704702b2eaff7b8",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.0"
-            },
-            "suggest": {
-                "dflydev/markdown": "~1.0",
-                "erusev/parsedown": "~1.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "phpDocumentor": [
-                        "src/"
-                    ]
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Mike van Riel",
-                    "email": "mike.vanriel@naenius.com"
-                }
-            ],
-            "time": "2015-02-03 12:10:50"
-        },
-        {
-            "name": "phpspec/prophecy",
-            "version": "v1.3.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/phpspec/prophecy.git",
-                "reference": "9ca52329bcdd1500de24427542577ebf3fc2f1c9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/9ca52329bcdd1500de24427542577ebf3fc2f1c9",
-                "reference": "9ca52329bcdd1500de24427542577ebf3fc2f1c9",
-                "shasum": ""
-            },
-            "require": {
-                "doctrine/instantiator": "~1.0,>=1.0.2",
-                "phpdocumentor/reflection-docblock": "~2.0"
-            },
-            "require-dev": {
-                "phpspec/phpspec": "~2.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.2.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Prophecy\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Konstantin Kudryashov",
-                    "email": "ever.zet@gmail.com",
-                    "homepage": "http://everzet.com"
-                },
-                {
-                    "name": "Marcello Duarte",
-                    "email": "marcello.duarte@gmail.com"
-                }
-            ],
-            "description": "Highly opinionated mocking framework for PHP 5.3+",
-            "homepage": "http://phpspec.org",
-            "keywords": [
-                "Double",
-                "Dummy",
-                "fake",
-                "mock",
-                "spy",
-                "stub"
-            ],
-            "time": "2014-11-17 16:23:49"
+            "time": "2015-03-26 10:07:42"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -888,16 +780,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "4.5.0",
+            "version": "4.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "5b578d3865a9128b9c209b011fda6539ec06e7a5"
+                "reference": "241116219bb7e3b8111a36ffd8f37546888738d6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/5b578d3865a9128b9c209b011fda6539ec06e7a5",
-                "reference": "5b578d3865a9128b9c209b011fda6539ec06e7a5",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/241116219bb7e3b8111a36ffd8f37546888738d6",
+                "reference": "241116219bb7e3b8111a36ffd8f37546888738d6",
                 "shasum": ""
             },
             "require": {
@@ -907,17 +799,15 @@
                 "ext-reflection": "*",
                 "ext-spl": "*",
                 "php": ">=5.3.3",
-                "phpspec/prophecy": "~1.3.1",
                 "phpunit/php-code-coverage": "~2.0",
-                "phpunit/php-file-iterator": "~1.3.2",
+                "phpunit/php-file-iterator": "~1.3.1",
                 "phpunit/php-text-template": "~1.2",
                 "phpunit/php-timer": "~1.0.2",
-                "phpunit/phpunit-mock-objects": "~2.3",
-                "sebastian/comparator": "~1.1",
+                "phpunit/phpunit-mock-objects": "2.1.5",
+                "sebastian/comparator": "~1.0",
                 "sebastian/diff": "~1.1",
-                "sebastian/environment": "~1.2",
-                "sebastian/exporter": "~1.2",
-                "sebastian/global-state": "~1.0",
+                "sebastian/environment": "~1.0",
+                "sebastian/exporter": "~1.0",
                 "sebastian/version": "~1.0",
                 "symfony/yaml": "~2.0"
             },
@@ -930,7 +820,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.5.x-dev"
+                    "dev-master": "4.1.x-dev"
                 }
             },
             "autoload": {
@@ -939,6 +829,10 @@
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
+            "include-path": [
+                "",
+                "../../symfony/yaml/"
+            ],
             "license": [
                 "BSD-3-Clause"
             ],
@@ -950,35 +844,34 @@
                 }
             ],
             "description": "The PHP Unit Testing framework.",
-            "homepage": "https://phpunit.de/",
+            "homepage": "http://www.phpunit.de/",
             "keywords": [
                 "phpunit",
                 "testing",
                 "xunit"
             ],
-            "time": "2015-02-05 15:51:19"
+            "time": "2014-08-17 08:07:02"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
-            "version": "2.3.0",
+            "version": "2.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "c63d2367247365f688544f0d500af90a11a44c65"
+                "reference": "7878b9c41edb3afab92b85edf5f0981014a2713a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/c63d2367247365f688544f0d500af90a11a44c65",
-                "reference": "c63d2367247365f688544f0d500af90a11a44c65",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/7878b9c41edb3afab92b85edf5f0981014a2713a",
+                "reference": "7878b9c41edb3afab92b85edf5f0981014a2713a",
                 "shasum": ""
             },
             "require": {
-                "doctrine/instantiator": "~1.0,>=1.0.1",
                 "php": ">=5.3.3",
                 "phpunit/php-text-template": "~1.2"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.3"
+                "phpunit/phpunit": "~4.1"
             },
             "suggest": {
                 "ext-soap": "*"
@@ -986,7 +879,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.3.x-dev"
+                    "dev-master": "2.1.x-dev"
                 }
             },
             "autoload": {
@@ -995,6 +888,9 @@
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
+            "include-path": [
+                ""
+            ],
             "license": [
                 "BSD-3-Clause"
             ],
@@ -1011,7 +907,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2014-10-03 05:12:11"
+            "time": "2014-06-12 07:22:15"
         },
         {
             "name": "react/promise",
@@ -1288,57 +1184,6 @@
                 "exporter"
             ],
             "time": "2015-01-27 07:23:06"
-        },
-        {
-            "name": "sebastian/global-state",
-            "version": "1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/sebastianbergmann/global-state.git",
-                "reference": "c7428acdb62ece0a45e6306f1ae85e1c05b09c01"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/global-state/zipball/c7428acdb62ece0a45e6306f1ae85e1c05b09c01",
-                "reference": "c7428acdb62ece0a45e6306f1ae85e1c05b09c01",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.2"
-            },
-            "suggest": {
-                "ext-uopz": "*"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0-dev"
-                }
-            },
-            "autoload": {
-                "classmap": [
-                    "src/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Sebastian Bergmann",
-                    "email": "sebastian@phpunit.de"
-                }
-            ],
-            "description": "Snapshotting of global state",
-            "homepage": "http://www.github.com/sebastianbergmann/global-state",
-            "keywords": [
-                "global state"
-            ],
-            "time": "2014-10-06 09:23:50"
         },
         {
             "name": "sebastian/recursion-context",
@@ -1654,7 +1499,7 @@
         },
         {
             "name": "typo3-ci/typo3cms",
-            "version": "6.2.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/typo3-ci/TYPO3CMS.git",
@@ -1704,7 +1549,7 @@
         },
         {
             "name": "typo3-ci/typo3sniffpool",
-            "version": "1.0.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/typo3-ci/TYPO3SniffPool.git",
@@ -1772,17 +1617,17 @@
         },
         {
             "name": "typo3/cms",
-            "version": "6.2.11",
+            "version": "7.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/TYPO3/TYPO3.CMS.git",
-                "reference": "1e44a4d1533aa4d70e6fa90ec96ef3f098844d59"
+                "reference": "5fa3e3899f93a5fcc022ad2564c1f23855c81e5f"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://get.typo3.org/6.2.11",
-                "reference": "6.2.11",
-                "shasum": "935aa012e2904742ddf1fd9bb2118865edf4097b"
+                "url": "http://get.typo3.org/7.1.0",
+                "reference": "7.1.0",
+                "shasum": "82f3ce50a83c0ae266649d8051f0456f97cfa3f7"
             },
             "require": {
                 "ext-fileinfo": "*",
@@ -1790,7 +1635,7 @@
                 "ext-session": "*",
                 "ext-xml": "*",
                 "helhum/class-alias-loader": "1.0.*@dev",
-                "php": ">=5.3.7",
+                "php": ">=5.5.0",
                 "typo3/cms-composer-installers": "1.1.*@dev"
             },
             "replace": {
@@ -1809,7 +1654,6 @@
                 "typo3/cms-documentation": "self.version",
                 "typo3/cms-extbase": "self.version",
                 "typo3/cms-extensionmanager": "self.version",
-                "typo3/cms-extra-page-cm-options": "self.version",
                 "typo3/cms-feedit": "self.version",
                 "typo3/cms-felogin": "self.version",
                 "typo3/cms-filelist": "self.version",
@@ -1830,7 +1674,6 @@
                 "typo3/cms-lowlevel": "self.version",
                 "typo3/cms-opendocs": "self.version",
                 "typo3/cms-openid": "self.version",
-                "typo3/cms-perm": "self.version",
                 "typo3/cms-recordlist": "self.version",
                 "typo3/cms-recycler": "self.version",
                 "typo3/cms-reports": "self.version",
@@ -1853,8 +1696,10 @@
                 "typo3/cms-workspaces": "self.version"
             },
             "require-dev": {
-                "mikey179/vfsstream": "1.3.*@dev",
-                "phpunit/phpunit": "~4.5.0"
+                "fortawesome/font-awesome": "4.2.*",
+                "mikey179/vfsstream": "1.4.*@dev",
+                "phpunit/phpunit": "~4.4.0",
+                "twbs/bootstrap": "3.3.*"
             },
             "suggest": {
                 "ext-gd": "GDlib/Freetype is required for building images with text (GIFBUILDER) and can also be used to scale images",
@@ -1866,22 +1711,10 @@
             "type": "typo3-cms-core",
             "extra": {
                 "branch-alias": {
-                    "dev-TYPO3_6-2": "6.2.x-dev"
+                    "dev-master": "7.x-dev"
                 },
-                "autoload-case-sensitivity": false,
                 "class-alias-maps": [
-                    "typo3/sysext/backend/Migrations/Code/ClassAliasMap.php",
-                    "typo3/sysext/core/Migrations/Code/ClassAliasMap.php",
-                    "typo3/sysext/cshmanual/Migrations/Code/ClassAliasMap.php",
-                    "typo3/sysext/extbase/Migrations/Code/ClassAliasMap.php",
-                    "typo3/sysext/extensionmanager/Migrations/Code/ClassAliasMap.php",
-                    "typo3/sysext/fluid/Migrations/Code/ClassAliasMap.php",
-                    "typo3/sysext/frontend/Migrations/Code/ClassAliasMap.php",
-                    "typo3/sysext/install/Migrations/Code/ClassAliasMap.php",
-                    "typo3/sysext/lang/Migrations/Code/ClassAliasMap.php",
-                    "typo3/sysext/recordlist/Migrations/Code/ClassAliasMap.php",
-                    "typo3/sysext/saltedpasswords/Migrations/Code/ClassAliasMap.php",
-                    "typo3/sysext/sv/Migrations/Code/ClassAliasMap.php"
+                    "typo3/sysext/core/Migrations/Code/ClassAliasMap.php"
                 ]
             },
             "autoload": {
@@ -1928,7 +1761,7 @@
                 "extbase",
                 "typo3"
             ],
-            "time": "2015-03-17 14:06:19"
+            "time": "2015-02-24 14:34:50"
         },
         {
             "name": "typo3/cms-composer-installers",
@@ -1995,7 +1828,10 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "dkd/php-cmis": 20
+        "dkd/cmis-service": 20,
+        "dkd/php-cmis": 20,
+        "typo3-ci/typo3sniffpool": 20,
+        "typo3-ci/typo3cms": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

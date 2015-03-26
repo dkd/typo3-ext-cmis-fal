@@ -1,4 +1,5 @@
 {
+  "exclude": "(^typo3conf/)",
   "linters": {
     "JavaScript Linter": {
       "type": "jshint",
