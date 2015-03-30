@@ -29,13 +29,29 @@ class CMISFilesystemDriverTest extends BaseTestCase {
 	 * @test
 	 * @return void
 	 */
-	public function testInitializeCallsExpectedMethods() {
+	public function testInitializeCallsExpectedMethodsWhenRootFolderSelected() {
 		$mock = $this->getMock(
 			'Dkd\\CmisFal\\Driver\\CMISFilesystemDriver',
-			array('initializeDependenciesTemporary', 'getProcessedFilesFolderObject')
+			array('initializeDependenciesTemporary', 'getProcessedFilesFolderObject', 'getRootLevelFolder')
 		);
+		$mock->expects($this->once())->method('getRootLevelFolder')->willReturn('test');
 		$mock->expects($this->once())->method('initializeDependenciesTemporary');
 		$mock->expects($this->once())->method('getProcessedFilesFolderObject');
+		$mock->initialize();
+	}
+
+	/**
+	 * @test
+	 * @return void
+	 */
+	public function testInitializeCallsExpectedMethodsWhenRootFolderNotSelected() {
+		$mock = $this->getMock(
+			'Dkd\\CmisFal\\Driver\\CMISFilesystemDriver',
+			array('initializeDependenciesTemporary', 'getProcessedFilesFolderObject', 'getRootLevelFolder')
+		);
+		$mock->expects($this->once())->method('getRootLevelFolder')->willReturn(NULL);
+		$mock->expects($this->never())->method('initializeDependenciesTemporary');
+		$mock->expects($this->never())->method('getProcessedFilesFolderObject');
 		$mock->initialize();
 	}
 

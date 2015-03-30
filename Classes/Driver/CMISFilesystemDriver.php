@@ -57,8 +57,11 @@ class CMISFilesystemDriver extends AbstractHierarchicalFilesystemDriver implemen
 	 * @return void
 	 */
 	public function initialize() {
-		$this->initializeDependenciesTemporary();
-		$this->getProcessedFilesFolderObject();
+		$rootLevelFolder = $this->getRootLevelFolder();
+		if (!empty($rootLevelFolder)) {
+			$this->initializeDependenciesTemporary();
+			$this->getProcessedFilesFolderObject();
+		}
 	}
 
 	/**
