@@ -85,7 +85,7 @@ class SubTransferDriver extends AbstractSubDriver {
 	 * @return string
 	 */
 	protected function getTemporaryPathForFile($fileIdentifier, $filename) {
-		return GeneralUtility::tempnam('fal-tempfile-', '.' . PathUtility::pathinfo($filename, PATHINFO_EXTENSION));
+		return GeneralUtility::tempnam('fal-tempfile-', '.' . pathinfo($filename, PATHINFO_EXTENSION));
 	}
 
 }
