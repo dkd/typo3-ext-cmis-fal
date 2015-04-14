@@ -53,8 +53,7 @@ class SubModificationDriver extends AbstractSubDriver {
 	 * @return string The identifier of the file after renaming
 	 */
 	public function renameFile($fileIdentifier, $newName) {
-		$this->renameCmisObject($fileIdentifier, $newName);
-		return array();
+		return $this->renameCmisObject($fileIdentifier, $newName);
 	}
 
 	/**
