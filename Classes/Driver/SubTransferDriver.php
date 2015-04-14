@@ -25,7 +25,7 @@ class SubTransferDriver extends AbstractSubDriver {
 	 */
 	public function getFileContents($fileIdentifier) {
 		$session = $this->driver->getSession();
-		return $session->getContentStream($session->createObjectId(reset(explode(';', $fileIdentifier))))->getContents();
+		return $session->getContentStream($session->createObjectId($fileIdentifier))->getContents();
 	}
 
 	/**
@@ -57,9 +57,8 @@ class SubTransferDriver extends AbstractSubDriver {
 	public function getFileForLocalProcessing($fileIdentifier, $writable = TRUE) {
 		$object = $this->driver->getObjectByIdentifier($fileIdentifier);
 		$temporaryFilePath = $this->getTemporaryPathForFile($fileIdentifier, $object->getName());
-		if ($writable || !file_exists($temporaryFilePath)) {
+		if ($writable || !file_exists($temporaryFilePath) || !filesize($temporaryFilePath)) {
 			$contents = $this->getFileContents($fileIdentifier);
-			$hash = $this->driver->hash($fileIdentifier, NULL);
 			GeneralUtility::writeFileToTypo3tempDir($temporaryFilePath, $contents);
 		}
 		return $temporaryFilePath;

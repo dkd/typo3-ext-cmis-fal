@@ -28,9 +28,16 @@ class SubAssertionDriver extends AbstractSubDriver {
 	 * @return boolean TRUE if $identifier is within or matches $folderIdentifier
 	 */
 	public function isWithin($folderIdentifier, $identifier) {
-		$isChild = in_array($identifier, $this->driver->getChildIdentifiers($this->driver->getObjectByIdentifier($folderIdentifier)));
-		$isSelf = $folderIdentifier === $identifier;
-		return $isChild || $isSelf;
+		try {
+			$object = $this->driver->getObjectByIdentifier($identifier);
+			$children = $this->driver->getChildIdentifiers($this->driver->getObjectByIdentifier($folderIdentifier));
+			$isChild = in_array($object->getId(), $children);
+			$isSelf = $folderIdentifier === $identifier;
+			return (boolean) ($isChild || $isSelf);
+		} catch (CmisObjectNotFoundException $error) {
+			return FALSE;
+		}
+		return FALSE;
 	}
 
 	/**
@@ -63,8 +70,12 @@ class SubAssertionDriver extends AbstractSubDriver {
 	 * @return boolean
 	 */
 	public function fileExists($fileIdentifier) {
-		$object = $this->driver->getObjectByIdentifier($fileIdentifier);
-		return $object && !$object instanceof FolderInterface;
+		try {
+			$object = $this->driver->getObjectByIdentifier($fileIdentifier);
+		} catch (CmisObjectNotFoundException $error) {
+			return FALSE;
+		}
+		return ($object instanceof DocumentInterface);
 	}
 
 	/**

@@ -12,10 +12,9 @@ class RepositorySelectorFiller {
 
 	/**
 	 * Adds possible options to the selector field that selects
-	 * which CMIS "folder" to use as top level for the FAL
-	 * storage. Items are fetched from the CMIS connection
-	 * configured in EXT:cmis_service and will display all
-	 * folders under the root level folder as possible options.
+	 * which CMIS "server" to use as top level for the FAL
+	 * storage. Items are fetched from the CMIS connections
+	 * configured in EXT:cmis_service
 	 *
 	 * @param array $parameters
 	 * @return void
@@ -23,10 +22,10 @@ class RepositorySelectorFiller {
 	public function processItems(array $parameters) {
 		$initializer = new Initialization();
 		$initializer->start();
-		foreach ($this->getSession()->getRootFolder()->getChildren() as $folder) {
+		foreach ($this->getConfiguredServerNames() as $serverName) {
 			$parameters['items'][] = array(
-				$folder->getName(),
-				$folder->getId()
+				$serverName,
+				$serverName
 			);
 		}
 	}
@@ -35,11 +34,11 @@ class RepositorySelectorFiller {
 	 * Get the CMIS session configured via EXT:cmis_service.
 	 *
 	 * @codeCoverageIgnore
-	 * @return SessionInterface
+	 * @return array
 	 */
-	protected function getSession() {
+	protected function getConfiguredServerNames() {
 		$factory = new CmisObjectFactory();
-		return $factory->getSession();
+		return $factory->getConfiguredServerNames();
 	}
 
 }

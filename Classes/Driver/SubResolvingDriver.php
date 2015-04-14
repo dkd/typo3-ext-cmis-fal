@@ -4,6 +4,8 @@ namespace Dkd\CmisFal\Driver;
 use Dkd\PhpCmis\Data\FolderInterface;
 use Dkd\PhpCmis\Enum\Action;
 use Dkd\PhpCmis\Enum\BaseTypeId;
+use Dkd\PhpCmis\Enum\ExtensionLevel;
+use Dkd\PhpCmis\Exception\CmisObjectNotFoundException;
 use Dkd\PhpCmis\PropertyIds;
 use TYPO3\CMS\Core\Resource\Exception\FileDoesNotExistException;
 use TYPO3\CMS\Core\Resource\Exception\FolderDoesNotExistException;
@@ -44,7 +46,9 @@ class SubResolvingDriver extends AbstractSubDriver {
 	 * @return string
 	 */
 	public function getPublicUrl($identifier) {
-		$object = $this->driver->getObjectByIdentifier($identifier);
+		$context = $this->driver->getSession()->getDefaultContext();
+		$context->setRenditionFilter(array('cmis:thumbnail'));
+		$object = $this->driver->getObjectByPath($identifier, $context);
 		$renditions = $object->getRenditions();
 		if (count($renditions) === 0) {
 			throw new FileDoesNotExistException(
@@ -62,7 +66,7 @@ class SubResolvingDriver extends AbstractSubDriver {
 	 * @return string
 	 */
 	public function getRootLevelFolder() {
-		return $this->driver->getOption(CMISFilesystemDriver::OPTION_REPOSITORY);
+		return $this->driver->getOption(CMISFilesystemDriver::OPTION_FOLDER);
 	}
 
 	/**
@@ -71,12 +75,11 @@ class SubResolvingDriver extends AbstractSubDriver {
 	 * @return string
 	 */
 	public function getDefaultFolder() {
-		$root = $this->driver->getRootLevelFolderObject();
-		$identifiers = $this->driver->getChildIdentifiers($root, 'cmis:document');
-		if (!in_array(CMISFilesystemDriver::FOLDER_DEFAULT, $identifiers)) {
-			$identifier = $this->driver->createFolder(CMISFilesystemDriver::FOLDER_DEFAULT, $root);
-		} else {
-			$identifier = $this->driver->getChildByName($root, CMISFilesystemDriver::FOLDER_DEFAULT);
+		try {
+			$identifier = $this->driver->getObjectByPath(CMISFilesystemDriver::FOLDER_DEFAULT)->getId();
+		} catch (CmisObjectNotFoundException $error) {
+			$rootId = $this->driver->getRootLevelFolder();
+			$identifier = $this->driver->createFolder(CMISFilesystemDriver::FOLDER_DEFAULT, $rootId);
 		}
 		return $identifier;
 	}

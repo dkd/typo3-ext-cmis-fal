@@ -7,10 +7,13 @@ use Dkd\PhpCmis\CmisObject\CmisObjectInterface;
 use Dkd\PhpCmis\Data\FileableCmisObjectInterface;
 use Dkd\PhpCmis\Data\FolderInterface;
 use Dkd\PhpCmis\Exception\CmisObjectNotFoundException;
+use Dkd\PhpCmis\OperationContext;
+use Dkd\PhpCmis\OperationContextInterface;
 use Dkd\PhpCmis\PropertyIds;
 use Dkd\PhpCmis\SessionInterface;
 use TYPO3\CMS\Core\Resource\Driver\AbstractHierarchicalFilesystemDriver;
 use TYPO3\CMS\Core\Resource\Driver\DriverInterface;
+use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 
 /**
@@ -19,6 +22,7 @@ use TYPO3\CMS\Core\Resource\ResourceStorage;
 class CMISFilesystemDriver extends AbstractHierarchicalFilesystemDriver implements DriverInterface {
 
 	const OPTION_REPOSITORY = 'repository';
+	const OPTION_FOLDER = 'folder';
 	const FOLDER_PROCESSED = '_processed_';
 	const FOLDER_DEFAULT = 'user_upload';
 	const FOLDER_TEMP = '_temp_';
@@ -152,7 +156,7 @@ class CMISFilesystemDriver extends AbstractHierarchicalFilesystemDriver implemen
 		$processedFolderId = $session->createObjectId(self::FOLDER_PROCESSED);
 		$processedFolder = $this->getChildByName($this->getRootLevelFolderObject(), self::FOLDER_PROCESSED);
 		if ($processedFolder === NULL) {
-			$identifier = $this->createFolder(self::FOLDER_PROCESSED, $this->getRootLevelFolder());
+			$identifier = $this->createFolder($session->createObjectId(self::FOLDER_PROCESSED), $this->getRootLevelFolder());
 			$processedFolder = $session->getObject($identifier);
 		}
 		return $processedFolder;
@@ -163,10 +167,11 @@ class CMISFilesystemDriver extends AbstractHierarchicalFilesystemDriver implemen
 	 *
 	 * @param FolderInterface $folder
 	 * @param string $childName
+	 * @param OperationContext|NULL $context
 	 * @return FileableCmisObjectInterface|NULL
 	 */
-	public function getChildByName(FolderInterface $folder, $childName) {
-		foreach ($folder->getChildren() as $child) {
+	public function getChildByName(FolderInterface $folder, $childName, OperationContext $context = NULL) {
+		foreach ($folder->getChildren($context) as $child) {
 			if ($childName === $child->getName() || $childName === $child->getId()) {
 				return $child;
 			}
@@ -186,13 +191,27 @@ class CMISFilesystemDriver extends AbstractHierarchicalFilesystemDriver implemen
 	public function getChildIdentifiers(FolderInterface $folder, $type = NULL) {
 		$identifiers = array();
 		foreach ($folder->getChildren() as $child) {
-			$id = $child->getPropertyValue(PropertyIds::OBJECT_ID);
+			$id = $child->getId();
 			$childType = $child->getPropertyValue(PropertyIds::OBJECT_TYPE_ID);
-			if (NULL === $type || $type === $childType) {
+			if ($type === NULL || $type === $childType) {
 				$identifiers[$id] = $id;
 			}
 		}
 		return $identifiers;
+	}
+
+	/**
+	 * Removes the ";$MAJ.$MIN" part of an CMIS UUID, returning
+	 * the unversioned UUID for those functions that require this.
+	 *
+	 * @param string $uuid
+	 * @return string
+	 */
+	public function removeVersionFromCmisObjectUuid($uuid) {
+		if (strpos($uuid, ';') !== FALSE) {
+			$uuid = substr($uuid, 0, strpos($uuid, ';') - 1);
+		}
+		return $uuid;
 	}
 
 	/**
@@ -217,7 +236,7 @@ class CMISFilesystemDriver extends AbstractHierarchicalFilesystemDriver implemen
 	 */
 	public function hash($fileIdentifier, $hashAlgorithm) {
 		$object = $this->getObjectByIdentifier($fileIdentifier);
-		return $object->getPropertyValue(PropertyIds::CONTENT_STREAM_HASH);
+		return sha1($object->getId());
 	}
 
 	/**
@@ -239,7 +258,7 @@ class CMISFilesystemDriver extends AbstractHierarchicalFilesystemDriver implemen
 	 * @return FolderInterface
 	 */
 	public function getRootLevelFolderObject() {
-		return $this->getObjectByIdentifier($this->getOption(self::OPTION_REPOSITORY));
+		return $this->getObjectByIdentifier($this->getOption(self::OPTION_FOLDER));
 	}
 
 	/**
@@ -248,21 +267,22 @@ class CMISFilesystemDriver extends AbstractHierarchicalFilesystemDriver implemen
 	 * the object (mimicing a filesystem structure).
 	 *
 	 * @param string $identifier
+	 * @param OperationContextInterface|NULL $context
 	 * @return FileableCmisObjectInterface
 	 */
-	public function getObjectByIdentifier($identifier) {
+	public function getObjectByIdentifier($identifier, OperationContextInterface $context = NULL) {
 		$identifier = trim($identifier, '/');
 		if ($identifier === '') {
 			$identifier = $this->getRootLevelFolder();
 		} elseif (self::FOLDER_PROCESSED === $identifier) {
 			return $this->getProcessedFilesFolderObject();
 		}
-		$session = $this->getSession();
 		try {
+			$session = $this->getSession();
 			$objectId = $session->createObjectId($identifier);
-			$object = $session->getObject($objectId);
+			$object = $session->getObject($objectId, $context);
 		} catch (CmisObjectNotFoundException $error) {
-			$object = $this->getObjectByPath($identifier);
+			$object = $this->getObjectByPath($identifier, $context);
 			if ($object === NULL) {
 				throw $error;
 			}
@@ -276,15 +296,16 @@ class CMISFilesystemDriver extends AbstractHierarchicalFilesystemDriver implemen
 	 * separated by slashes.
 	 *
 	 * @param string $path
+	 * @param OperationContextInterface|NULL $context
 	 * @return FileableCmisObjectInterface|NULL
 	 */
-	public function getObjectByPath($path) {
+	public function getObjectByPath($path, OperationContextInterface $context = NULL) {
 		$relativePath = trim($path, '/');
 		$object = $this->getRootLevelFolderObject();
-		if ($relativePath !== '') {
+		if (!empty($relativePath)) {
 			$segments = explode('/', (string) $relativePath);
 			foreach ($segments as $segment) {
-				$object = $this->getChildByName($object, $segment);
+				$object = $this->getChildByName($object, $segment, $context);
 			}
 		}
 		return $object;
@@ -321,7 +342,7 @@ class CMISFilesystemDriver extends AbstractHierarchicalFilesystemDriver implemen
 	 */
 	public function getSession() {
 		$factory = new CmisObjectFactory();
-		return $factory->getSession();
+		return $factory->getSession($this->getOption(self::OPTION_REPOSITORY));
 	}
 
 	// ------------- Creations------------- //
@@ -517,7 +538,7 @@ class CMISFilesystemDriver extends AbstractHierarchicalFilesystemDriver implemen
 	 * file, you have to take care of replacing the current version yourself!
 	 *
 	 * @param string $fileIdentifier
-	 * @param bool $writable Set this to FALSE if you only need the file for read
+	 * @param boolean $writable Set this to FALSE if you only need the file for read
 	 *                       operations. This might speed up things, e.g. by using
 	 *                       a cached local version. Never modify the file if you
 	 *                       have set this flag!
@@ -644,7 +665,6 @@ class CMISFilesystemDriver extends AbstractHierarchicalFilesystemDriver implemen
 	 * @param integer $items
 	 * @param boolean $recurse
 	 * @param array $callbacks callbacks for filtering the items
-	 *
 	 * @return array of FileIdentifiers
 	 */
 	public function getFilesInFolder($folderIdentifier, $start = 0, $items = 0, $recurse = FALSE, array $callbacks = array()) {
@@ -659,7 +679,6 @@ class CMISFilesystemDriver extends AbstractHierarchicalFilesystemDriver implemen
 	 * @param integer $items
 	 * @param boolean $recurse
 	 * @param array $callbacks callbacks for filtering the items
-	 *
 	 * @return array of Folder Identifier
 	 */
 	public function getFoldersInFolder($folderIdentifier, $start = 0, $items = 0, $recurse = FALSE, array $callbacks = array()) {

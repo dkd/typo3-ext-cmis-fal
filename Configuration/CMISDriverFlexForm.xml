@@ -16,6 +16,16 @@
                     </config>
                 </TCEforms>
             </repository>
+            <folder>
+                <TCEforms>
+                    <label>LLL:EXT:cmis_fal/Resources/Private/Language/locallang.xlf:flexform_folder</label>
+                    <config>
+                        <type>select</type>
+                        <itemsProcFunc>Dkd\CmisFal\UserFunction\RootFolderSelectorFiller->processItems</itemsProcFunc>
+                        <items></items>
+                    </config>
+                </TCEforms>
+            </folder>
         </el>
     </ROOT>
 </T3DataStructure>

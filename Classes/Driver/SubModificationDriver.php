@@ -120,15 +120,16 @@ class SubModificationDriver extends AbstractSubDriver {
 	 *
 	 * @param string $objectIdentifier
 	 * @param string $newName
-	 * @return void
+	 * @return string
 	 */
 	protected function renameCmisObject($objectIdentifier, $newName) {
-		$folder = $this->driver->getObjectByIdentifier($objectIdentifier);
-		if ($newName !== $folder->getPropertyValue(PropertyIds::NAME)) {
-			$folder->updateProperties(array(
+		$object = $this->driver->getObjectByIdentifier($objectIdentifier);
+		if ($newName !== $object->getPropertyValue(PropertyIds::NAME)) {
+			$object->updateProperties(array(
 				PropertyIds::NAME => $newName
 			));
 		}
+		return $object->getId();
 	}
 
 	/**

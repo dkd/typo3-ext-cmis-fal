@@ -157,8 +157,11 @@ class CMISFilesystemDriverTest extends BaseTestCase {
 	 * @return void
 	 */
 	public function testGetObjectByPathResolvesEachSegment() {
-		$folder = $this->getMock('Dkd\\PhpCmis\\DataObjects\\Folder', array('dummy'), array(), '', FALSE);
-		$mock = $this->getMock('Dkd\\CmisFal\\Driver\\CMISFilesystemDriver', array('getChildByName', 'getRootLevelFolderObject'));
+		$folder = $this->getMock('Dkd\\PhpCmis\\DataObjects\\Folder', array('getChildren'), array(), '', FALSE);
+		$mock = $this->getMock(
+			'Dkd\\CmisFal\\Driver\\CMISFilesystemDriver',
+			array('getRootLevelFolderObject', 'getChildByName')
+		);
 		$mock->expects($this->once())->method('getRootLevelFolderObject')->willReturn($folder);
 		$path = 'foo/bar/baz';
 		$segments = explode('/', $path);
