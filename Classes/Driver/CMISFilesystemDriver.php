@@ -153,11 +153,10 @@ class CMISFilesystemDriver extends AbstractHierarchicalFilesystemDriver implemen
 	 */
 	public function getProcessedFilesFolderObject() {
 		$session = $this->getSession();
-		$processedFolderId = $session->createObjectId(self::FOLDER_PROCESSED);
 		$processedFolder = $this->getChildByName($this->getRootLevelFolderObject(), self::FOLDER_PROCESSED);
 		if ($processedFolder === NULL) {
-			$identifier = $this->createFolder($session->createObjectId(self::FOLDER_PROCESSED), $this->getRootLevelFolder());
-			$processedFolder = $session->getObject($identifier);
+			$identifier = $this->createFolder(self::FOLDER_PROCESSED, $this->getRootLevelFolder());
+			$processedFolder = $session->getObject($session->createObjectId($identifier));
 		}
 		return $processedFolder;
 	}
