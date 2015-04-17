@@ -1,10 +1,9 @@
 <?php
 namespace Dkd\CmisFal\Driver;
 
-use Dkd\PhpCmis\Data\FolderInterface;
+use Dkd\PhpCmis\Data\DocumentInterface;
 use Dkd\PhpCmis\Enum\Action;
 use Dkd\PhpCmis\Enum\BaseTypeId;
-use Dkd\PhpCmis\Enum\ExtensionLevel;
 use Dkd\PhpCmis\Exception\CmisObjectNotFoundException;
 use Dkd\PhpCmis\PropertyIds;
 use TYPO3\CMS\Core\Resource\Exception\FileDoesNotExistException;
@@ -44,20 +43,26 @@ class SubResolvingDriver extends AbstractSubDriver {
 	 *
 	 * @param string $identifier
 	 * @return string
+	 * @throws FileDoesNotExistException Exception is thrown if the public url
+	 * could not be received.
 	 */
 	public function getPublicUrl($identifier) {
 		$context = $this->driver->getSession()->getDefaultContext();
 		$context->setRenditionFilter(array('cmis:thumbnail'));
 		$object = $this->driver->getObjectByPath($identifier, $context);
-		$renditions = $object->getRenditions();
-		if (count($renditions) === 0) {
-			throw new FileDoesNotExistException(
-				'File "' . $identifier . '" has no rendition in CMIS repository but the repository is configured for public ' .
-				' accessibility. To make your files previewable using public accessibility, configure a rendition for your ' .
-				' CMIS objects in this storage.'
-			);
+		$rendition = '';
+		if ($object instanceof DocumentInterface) {
+			$renditions = $object->getRenditions();
+			if (count($renditions) === 0) {
+				throw new FileDoesNotExistException(
+					'File "' . $identifier . '" has no rendition in CMIS repository but the repository is configured for public ' .
+					' accessibility. To make your files previewable using public accessibility, configure a rendition for your ' .
+					' CMIS objects in this storage.'
+				);
+			}
+			$rendition = $renditions[0]->getStreamId();
 		}
-		return $renditions[0]->getStreamId();
+		return $rendition;
 	}
 
 	/**
