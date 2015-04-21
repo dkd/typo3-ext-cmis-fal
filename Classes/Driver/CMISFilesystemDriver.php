@@ -13,6 +13,7 @@ use Dkd\PhpCmis\PropertyIds;
 use Dkd\PhpCmis\SessionInterface;
 use TYPO3\CMS\Core\Resource\Driver\AbstractHierarchicalFilesystemDriver;
 use TYPO3\CMS\Core\Resource\Driver\DriverInterface;
+use TYPO3\CMS\Core\Resource\Exception\FileDoesNotExistException;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 
@@ -717,9 +718,8 @@ class CMISFilesystemDriver extends AbstractHierarchicalFilesystemDriver implemen
 	 * Returns the public URL to a file.
 	 * Either fully qualified URL or relative to PATH_site (rawurlencoded).
 	 *
-	 *
 	 * @param string $identifier
-	 * @return string
+	 * @return string|NULL
 	 */
 	public function getPublicUrl($identifier) {
 		return $this->getSubResolvingDriver()->getPublicUrl($identifier);

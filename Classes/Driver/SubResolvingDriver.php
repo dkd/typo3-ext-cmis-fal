@@ -42,15 +42,34 @@ class SubResolvingDriver extends AbstractSubDriver {
 	 * Either fully qualified URL or relative to PATH_site (rawurlencoded).
 	 *
 	 * @param string $identifier
-	 * @return string
-	 * @throws FileDoesNotExistException Exception is thrown if the public url
-	 * could not be received.
+	 * @return string|NULL
 	 */
 	public function getPublicUrl($identifier) {
+		$object = $this->driver->getObjectByPath($identifier);
+		if ($object instanceof DocumentInterface) {
+			return $object->getContentUrl();
+		}
+		return NULL;
+	}
+
+	/**
+	 * Get a rendition for an object.
+	 *
+	 * Could be used to get a thumbnail for a video or an text document.
+	 *
+	 * @TODO check if we need that method and how we can use it to display
+	 * thumbnails for videos
+	 *
+	 * @param string $identifier
+	 * @param string $renditionFilter
+	 * @return NULL|string
+	 * @throws FileDoesNotExistException
+	 */
+	protected function getRendition($identifier, $renditionFilter = 'cmis:thumbnail') {
 		$context = $this->driver->getSession()->getDefaultContext();
-		$context->setRenditionFilter(array('cmis:thumbnail'));
+		$context->setRenditionFilter(array($renditionFilter));
 		$object = $this->driver->getObjectByPath($identifier, $context);
-		$rendition = '';
+		$rendition = NULL;
 		if ($object instanceof DocumentInterface) {
 			$renditions = $object->getRenditions();
 			if (count($renditions) === 0) {
@@ -60,7 +79,7 @@ class SubResolvingDriver extends AbstractSubDriver {
 					' CMIS objects in this storage.'
 				);
 			}
-			$rendition = $renditions[0]->getStreamId();
+			$rendition = $renditions[0]->getContentUrl();
 		}
 		return $rendition;
 	}
