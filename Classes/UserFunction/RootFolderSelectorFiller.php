@@ -6,7 +6,6 @@ use Dkd\CmisService\Initialization;
 use Dkd\PhpCmis\Data\FolderInterface;
 use Dkd\PhpCmis\PropertyIds;
 use Dkd\PhpCmis\SessionInterface;
-use TYPO3\CMS\Core\Utility\DebugUtility;
 
 /**
  * Class RootFolderSelectorFiller
@@ -27,6 +26,7 @@ class RootFolderSelectorFiller {
 		$initializer = new Initialization();
 		$initializer->start();
 		$serverName = $this->getFlexFormValue($parameters['row']['configuration'], 'repository');
+		$parameters['items'][] = array('- select a root folder -', NULL);
 		if (!empty($serverName)) {
 			$context = $this->getSession($serverName)->getDefaultContext();
 			$context->setFilter(array(PropertyIds::NAME));

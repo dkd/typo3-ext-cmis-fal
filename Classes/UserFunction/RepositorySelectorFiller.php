@@ -3,7 +3,6 @@ namespace Dkd\CmisFal\UserFunction;
 
 use Dkd\CmisService\Factory\CmisObjectFactory;
 use Dkd\CmisService\Initialization;
-use Dkd\PhpCmis\SessionInterface;
 
 /**
  * Class RepositorySelectorFiller
@@ -22,6 +21,7 @@ class RepositorySelectorFiller {
 	public function processItems(array $parameters) {
 		$initializer = new Initialization();
 		$initializer->start();
+		$parameters['items'][] = array('- select repository -', NULL);
 		foreach ($this->getConfiguredServerNames() as $serverName) {
 			$parameters['items'][] = array(
 				$serverName,
