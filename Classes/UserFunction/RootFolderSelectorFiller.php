@@ -3,7 +3,10 @@ namespace Dkd\CmisFal\UserFunction;
 
 use Dkd\CmisService\Factory\CmisObjectFactory;
 use Dkd\CmisService\Initialization;
+use Dkd\PhpCmis\Data\FolderInterface;
+use Dkd\PhpCmis\PropertyIds;
 use Dkd\PhpCmis\SessionInterface;
+use TYPO3\CMS\Core\Utility\DebugUtility;
 
 /**
  * Class RootFolderSelectorFiller
@@ -25,11 +28,15 @@ class RootFolderSelectorFiller {
 		$initializer->start();
 		$serverName = $this->getFlexFormValue($parameters['row']['configuration'], 'repository');
 		if (!empty($serverName)) {
-			foreach ($this->getSession($serverName)->getRootFolder()->getChildren() as $folder) {
-				$parameters['items'][] = array(
-					$folder->getName(),
-					$folder->getId()
-				);
+			$context = $this->getSession($serverName)->getDefaultContext();
+			$context->setFilter(array(PropertyIds::NAME));
+			foreach ($this->getSession($serverName)->getRootFolder($context)->getChildren() as $folder) {
+				if ($folder instanceof FolderInterface) {
+					$parameters['items'][] = array(
+						$folder->getName(),
+						$folder->getId()
+					);
+				}
 			}
 		}
 	}
