@@ -13,8 +13,7 @@ use Dkd\PhpCmis\PropertyIds;
 use Dkd\PhpCmis\SessionInterface;
 use TYPO3\CMS\Core\Resource\Driver\AbstractHierarchicalFilesystemDriver;
 use TYPO3\CMS\Core\Resource\Driver\DriverInterface;
-use TYPO3\CMS\Core\Resource\Exception\FileDoesNotExistException;
-use TYPO3\CMS\Core\Resource\File;
+use TYPO3\CMS\Core\Resource\Exception\InvalidConfigurationException;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 
 /**
@@ -52,7 +51,22 @@ class CMISFilesystemDriver extends AbstractHierarchicalFilesystemDriver implemen
 	 * @return void
 	 */
 	public function processConfiguration() {
-
+		try {
+			// try to initialize the session and get the root folder.
+			$rootLevelFolder = $this->getRootLevelFolder();
+			if (!empty($rootLevelFolder)) {
+				$this->initializeDependenciesTemporary();
+				$this->getProcessedFilesFolderObject();
+			}
+		} catch (\RuntimeException $e) {
+			// something went wrong while initializing the CMIS session. Throw an exception
+			// so that the driver is marked temporarily offline.
+			throw new InvalidConfigurationException(
+				'There was a problem while initializing the connection to the CMIS Server.',
+				1430131572,
+				$e
+			);
+		}
 	}
 
 	/**
@@ -62,11 +76,6 @@ class CMISFilesystemDriver extends AbstractHierarchicalFilesystemDriver implemen
 	 * @return void
 	 */
 	public function initialize() {
-		$rootLevelFolder = $this->getRootLevelFolder();
-		if (!empty($rootLevelFolder)) {
-			$this->initializeDependenciesTemporary();
-			$this->getProcessedFilesFolderObject();
-		}
 	}
 
 	/**
