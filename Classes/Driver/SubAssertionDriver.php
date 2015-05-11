@@ -37,7 +37,6 @@ class SubAssertionDriver extends AbstractSubDriver {
 		} catch (CmisObjectNotFoundException $error) {
 			return FALSE;
 		}
-		return FALSE;
 	}
 
 	/**
@@ -86,7 +85,11 @@ class SubAssertionDriver extends AbstractSubDriver {
 	 * @return boolean
 	 */
 	public function folderExists($folderIdentifier) {
-		return $this->driver->getObjectByIdentifier($folderIdentifier) instanceof FolderInterface;
+		try {
+			return $this->driver->getObjectByIdentifier($folderIdentifier) instanceof FolderInterface;
+		} catch (CmisObjectNotFoundException $error) {
+			return FALSE;
+		}
 	}
 
 	/**
@@ -96,8 +99,14 @@ class SubAssertionDriver extends AbstractSubDriver {
 	 * @return boolean TRUE if there are no files and folders within $folder
 	 */
 	public function isFolderEmpty($folderIdentifier) {
-		$folder = $this->driver->getObjectByIdentifier($folderIdentifier);
-		return $folder instanceof FolderInterface && count($folder->getChildren()) === 0;
+		try {
+			$folder = $this->driver->getObjectByIdentifier($folderIdentifier);
+			$isEmpty = $folder instanceof FolderInterface && count($folder->getChildren()) === 0;
+		} catch (CmisObjectNotFoundException $error) {
+			$isEmpty = FALSE;
+		}
+
+		return $isEmpty;
 	}
 
 }
