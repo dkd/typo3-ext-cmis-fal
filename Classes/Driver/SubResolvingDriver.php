@@ -2,6 +2,7 @@
 namespace Dkd\CmisFal\Driver;
 
 use Dkd\PhpCmis\Data\DocumentInterface;
+use Dkd\PhpCmis\Data\FolderInterface;
 use Dkd\PhpCmis\Enum\Action;
 use Dkd\PhpCmis\Enum\BaseTypeId;
 use Dkd\PhpCmis\Exception\CmisObjectNotFoundException;
@@ -131,13 +132,13 @@ class SubResolvingDriver extends AbstractSubDriver {
 	 */
 	public function getFolderInfoByIdentifier($folderIdentifier) {
 		$object = $this->driver->getObjectByIdentifier($folderIdentifier);
-		if ($object === NULL) {
+		if (!$object instanceof FolderInterface) {
 			throw new FolderDoesNotExistException('Folder ' . $folderIdentifier . ' does not exist.', 1314516810);
 		}
 		return array(
 			'identifier' => $object->getId(),
 			'name' => $object->getName(),
-			'storage' => $this->storageUid
+			'storage' => $this->driver->getStorageUid()
 		);
 	}
 

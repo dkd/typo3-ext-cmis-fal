@@ -46,6 +46,15 @@ class CMISFilesystemDriver extends AbstractHierarchicalFilesystemDriver implemen
 	}
 
 	/**
+	 * Return the storage uid the driver belongs to
+	 *
+	 * @return integer
+	 */
+	public function getStorageUid() {
+		return $this->storageUid;
+	}
+
+	/**
 	 * Processes the configuration for this driver.
 	 *
 	 * @return void
