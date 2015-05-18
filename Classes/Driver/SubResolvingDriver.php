@@ -96,7 +96,10 @@ class SubResolvingDriver extends AbstractSubDriver {
 	 * @return string
 	 */
 	public function getRootLevelFolder() {
-		return $this->driver->getOption(CMISFilesystemDriver::OPTION_FOLDER);
+		return $this->driver->getOption(
+			CMISFilesystemDriver::OPTION_FOLDER,
+			$this->driver->getSession()->getRootFolder()->getId()
+		);
 	}
 
 	/**
