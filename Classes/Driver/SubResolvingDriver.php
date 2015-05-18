@@ -27,8 +27,13 @@ class SubResolvingDriver extends AbstractSubDriver {
 	 */
 	public function getPermissions($identifier) {
 		$object = $this->driver->getObjectByIdentifier($identifier);
-		$allowableActions = $object->getAllowableActions()->getAllowableActions();
-		$hasGetProperties = in_array((string) Action::cast(Action::CAN_GET_PROPERTIES), $allowableActions);
+		$allowableActions = array();
+		if ($object->getAllowableActions() !== NULL) {
+			$allowableActions = $object->getAllowableActions()->getAllowableActions();
+			$hasGetProperties = in_array((string) Action::cast(Action::CAN_GET_PROPERTIES), $allowableActions);
+		} else {
+			$hasGetProperties = TRUE;
+		}
 		$hasCreateDocument = in_array((string) Action::cast(Action::CAN_CREATE_DOCUMENT), $allowableActions);
 		$hasCreateFolder = in_array((string) Action::cast(Action::CAN_CREATE_FOLDER), $allowableActions);
 		$hasDelete = in_array((string) Action::cast(Action::CAN_DELETE_OBJECT), $allowableActions);
