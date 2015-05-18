@@ -258,7 +258,7 @@ class CMISFilesystemDriver extends AbstractHierarchicalFilesystemDriver implemen
 	 * @return mixed|NULL
 	 */
 	public function getOption($name, $default = NULL) {
-		return isset($this->configuration[$name]) ? $this->configuration[$name] : $default;
+		return !empty($this->configuration[$name]) ? $this->configuration[$name] : $default;
 	}
 
 	/**
@@ -267,7 +267,7 @@ class CMISFilesystemDriver extends AbstractHierarchicalFilesystemDriver implemen
 	 * @return FolderInterface
 	 */
 	public function getRootLevelFolderObject() {
-		return $this->getObjectByIdentifier($this->getOption(self::OPTION_FOLDER));
+		return $this->getObjectByIdentifier($this->getRootLevelFolder());
 	}
 
 	/**
