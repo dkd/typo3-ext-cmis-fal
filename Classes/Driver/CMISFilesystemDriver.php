@@ -13,6 +13,7 @@ use Dkd\PhpCmis\PropertyIds;
 use Dkd\PhpCmis\SessionInterface;
 use TYPO3\CMS\Core\Resource\Driver\AbstractHierarchicalFilesystemDriver;
 use TYPO3\CMS\Core\Resource\Driver\DriverInterface;
+use TYPO3\CMS\Core\Resource\Exception\FileOperationErrorException;
 use TYPO3\CMS\Core\Resource\Exception\InvalidConfigurationException;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 
@@ -147,8 +148,12 @@ class CMISFilesystemDriver extends AbstractHierarchicalFilesystemDriver implemen
 		$value = NULL;
 		if (isset($map[$property])) {
 			$value = $object->getPropertyValue($map[$property]);
-			if (in_array($property, $dates)) {
-				$value = (integer) $value->format('U');
+			if (in_array($property, $dates) && $value instanceof \DateTime) {
+				$value = $value->format('U');
+			} elseif ($property === 'mimetype') {
+				$value = (string) $value;
+			} elseif ($property === 'size') {
+				$value = (integer) $value;
 			}
 		} elseif ($property === 'storage') {
 			$value = $this->storageUid;
@@ -159,7 +164,7 @@ class CMISFilesystemDriver extends AbstractHierarchicalFilesystemDriver implemen
 				$this->getParentFolderIdentifierOfIdentifier($object->getPropertyValue(PropertyIds::OBJECT_ID))
 			);
 		} else {
-			throw new \InvalidArgumentException(sprintf('The information "%s" is not available.', $property));
+			throw new FileOperationErrorException(sprintf('The information "%s" is not available.', $property));
 		}
 		return $value;
 	}
