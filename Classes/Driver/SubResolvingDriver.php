@@ -6,9 +6,7 @@ use Dkd\PhpCmis\Data\FolderInterface;
 use Dkd\PhpCmis\Enum\Action;
 use Dkd\PhpCmis\Enum\BaseTypeId;
 use Dkd\PhpCmis\Exception\CmisObjectNotFoundException;
-use Dkd\PhpCmis\PropertyIds;
 use TYPO3\CMS\Core\Resource\Exception\FileDoesNotExistException;
-use TYPO3\CMS\Core\Resource\Exception\FolderDoesNotExistException;
 
 /**
  * Class SubResolvingDriver
@@ -126,7 +124,7 @@ class SubResolvingDriver extends AbstractSubDriver {
 	 */
 	public function getFileInfoByIdentifier($fileIdentifier, array $propertiesToExtract = array()) {
 		$object = $this->driver->getObjectByIdentifier($fileIdentifier);
-		if (!BaseTypeId::cast(BaseTypeId::CMIS_DOCUMENT)->equals($object->getPropertyValue(PropertyIds::BASE_TYPE_ID))) {
+		if (!$object instanceof DocumentInterface) {
 			throw new \InvalidArgumentException('File ' . $fileIdentifier . ' does not exist.', 1314516809);
 		}
 		return $this->driver->extractFileInformation($object, $propertiesToExtract);
@@ -161,7 +159,10 @@ class SubResolvingDriver extends AbstractSubDriver {
 	 * @return array of FileIdentifiers
 	 */
 	public function getFilesInFolder($folderIdentifier, $start = 0, $items = 0, $recurse = FALSE, array $callbacks = array()) {
-		return $this->driver->getChildIdentifiers($this->driver->getObjectByIdentifier($folderIdentifier), 'cmis:document');
+		return $this->driver->getChildIdentifiers(
+			$this->getFolderByIdentifier($folderIdentifier),
+			BaseTypeId::cast(BaseTypeId::CMIS_DOCUMENT)
+		);
 	}
 
 	/**
@@ -175,7 +176,9 @@ class SubResolvingDriver extends AbstractSubDriver {
 	 * @return array of Folder Identifier
 	 */
 	public function getFoldersInFolder($folderIdentifier, $start = 0, $items = 0, $recurse = FALSE, array $callbacks = array()) {
-		return $this->driver->getChildIdentifiers($this->driver->getObjectByIdentifier($folderIdentifier), 'cmis:folder');
+		return $this->driver->getChildIdentifiers(
+			$this->getFolderByIdentifier($folderIdentifier),
+			BaseTypeId::cast(BaseTypeId::CMIS_FOLDER)
+		);
 	}
-
 }

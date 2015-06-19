@@ -6,6 +6,7 @@ use Dkd\CmisService\Initialization;
 use Dkd\PhpCmis\CmisObject\CmisObjectInterface;
 use Dkd\PhpCmis\Data\FileableCmisObjectInterface;
 use Dkd\PhpCmis\Data\FolderInterface;
+use Dkd\PhpCmis\Enum\BaseTypeId;
 use Dkd\PhpCmis\Exception\CmisObjectNotFoundException;
 use Dkd\PhpCmis\OperationContext;
 use Dkd\PhpCmis\OperationContextInterface;
@@ -203,20 +204,19 @@ class CMISFilesystemDriver extends AbstractHierarchicalFilesystemDriver implemen
 	}
 
 	/**
-	 * Get all child object identifiers beheath parent folder,
+	 * Get all child object identifiers beneath parent folder,
 	 * optionally limiting the returned identifiers to only those
 	 * objects which match the provided type.
 	 *
 	 * @param FolderInterface $folder
-	 * @param string|NULL $type
+	 * @param BaseTypeId|NULL $baseType
 	 * @return array
 	 */
-	public function getChildIdentifiers(FolderInterface $folder, $type = NULL) {
+	public function getChildIdentifiers(FolderInterface $folder, BaseTypeId $baseType = NULL) {
 		$identifiers = array();
 		foreach ($folder->getChildren() as $child) {
 			$id = $child->getId();
-			$childType = $child->getPropertyValue(PropertyIds::OBJECT_TYPE_ID);
-			if ($type === NULL || $type === $childType) {
+			if ($baseType === NULL || $baseType->equals($child->getPropertyValue(PropertyIds::BASE_TYPE_ID))) {
 				$identifiers[$id] = $id;
 			}
 		}

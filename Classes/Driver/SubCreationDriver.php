@@ -1,8 +1,7 @@
 <?php
 namespace Dkd\CmisFal\Driver;
 
-use Dkd\PhpCmis\Data\FolderInterface;
-use Dkd\PhpCmis\Enum\VersioningState;
+use Dkd\PhpCmis\Exception\CmisContentAlreadyExistsException;
 use Dkd\PhpCmis\PropertyIds;
 use GuzzleHttp\Stream\Stream;
 use GuzzleHttp\Stream\StreamInterface;
@@ -25,13 +24,22 @@ class SubCreationDriver extends AbstractSubDriver {
 	 * @return string the Identifier of the new folder
 	 */
 	public function createFolder($newFolderName, $parentFolderIdentifier = '', $recursive = FALSE) {
-		return $this->driver->getSession()->createFolder(
-			array(
-				PropertyIds::OBJECT_TYPE_ID => 'cmis:folder',
-				PropertyIds::NAME => $newFolderName
-			),
-			$this->driver->getObjectByIdentifier($parentFolderIdentifier)
-		)->getId();
+		$parentFolder = $this->getFolderByIdentifier($parentFolderIdentifier);
+		try {
+			$folderIdentifier = $this->driver->getSession()->createFolder(
+				array(
+					PropertyIds::OBJECT_TYPE_ID => 'cmis:folder',
+					PropertyIds::NAME => $newFolderName
+				),
+				$this->driver->getSession()->createObjectId($parentFolder->getId())
+			)->getId();
+		} catch (CmisContentAlreadyExistsException $e) {
+			$folderIdentifier = $this->driver->getSession()->getObjectByPath(
+				$parentFolder->getPath() . '/' . $newFolderName
+			)->getId();
+		}
+
+		return $folderIdentifier;
 	}
 
 	/**
@@ -66,7 +74,7 @@ class SubCreationDriver extends AbstractSubDriver {
 				PropertyIds::NAME => $fileName,
 				PropertyIds::OBJECT_TYPE_ID => 'cmis:document'
 			),
-			$this->driver->getObjectByIdentifier($parentFolderIdentifier),
+			$this->driver->getSession()->createObjectId($parentFolderIdentifier),
 			$stream
 		)->getId();
 	}

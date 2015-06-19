@@ -30,13 +30,14 @@ class SubAssertionDriver extends AbstractSubDriver {
 	public function isWithin($folderIdentifier, $identifier) {
 		try {
 			$object = $this->driver->getObjectByIdentifier($identifier);
-			$children = $this->driver->getChildIdentifiers($this->driver->getObjectByIdentifier($folderIdentifier));
+			$children = $this->driver->getChildIdentifiers($this->getFolderByIdentifier($folderIdentifier));
 			$isChild = in_array($object->getId(), $children);
 			$isSelf = $folderIdentifier === $identifier;
-			return (boolean) ($isChild || $isSelf);
+			$isWithin = (boolean) ($isChild || $isSelf);
 		} catch (CmisObjectNotFoundException $error) {
-			return FALSE;
+			$isWithin = FALSE;
 		}
+		return $isWithin;
 	}
 
 	/**
@@ -86,10 +87,11 @@ class SubAssertionDriver extends AbstractSubDriver {
 	 */
 	public function folderExists($folderIdentifier) {
 		try {
-			return $this->driver->getObjectByIdentifier($folderIdentifier) instanceof FolderInterface;
+			$folderExists = $this->driver->getObjectByIdentifier($folderIdentifier) instanceof FolderInterface;
 		} catch (CmisObjectNotFoundException $error) {
-			return FALSE;
+			$folderExists = FALSE;
 		}
+		return $folderExists;
 	}
 
 	/**
