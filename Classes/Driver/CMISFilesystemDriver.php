@@ -281,7 +281,9 @@ class CMISFilesystemDriver extends AbstractHierarchicalFilesystemDriver implemen
 	 * @return FolderInterface
 	 */
 	public function getRootLevelFolderObject() {
-		return $this->getObjectByIdentifier($this->getRootLevelFolder());
+		$session = $this->getSession();
+		$objectId = $session->createObjectId($this->getRootLevelFolder());
+		return $session->getObject($objectId);
 	}
 
 	/**
