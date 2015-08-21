@@ -35,6 +35,14 @@ abstract class AbstractSubDriver {
 	}
 
 	/**
+	 * @param string $identifier
+	 * @return string
+	 */
+	protected function sanitizeFolderIdentifier($identifier) {
+		return trim($identifier, '/');
+	}
+
+	/**
 	 * Get a CMIS Folder object by its identifier.
 	 *
 	 * Only the name is requested from the CMIS server.
@@ -45,6 +53,7 @@ abstract class AbstractSubDriver {
 	 * @throws FolderDoesNotExistException
 	 */
 	protected function getFolderByIdentifier($identifier) {
+		$identifier = $this->sanitizeFolderIdentifier($identifier);
 		$context = $this->driver->getSession()->getDefaultContext();
 		$context->setFilter(array(PropertyIds::NAME));
 		$context->setIncludeRelationships(IncludeRelationships::cast(IncludeRelationships::NONE));

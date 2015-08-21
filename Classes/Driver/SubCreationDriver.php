@@ -74,7 +74,7 @@ class SubCreationDriver extends AbstractSubDriver {
 				PropertyIds::NAME => $fileName,
 				PropertyIds::OBJECT_TYPE_ID => 'cmis:document'
 			),
-			$this->driver->getSession()->createObjectId($parentFolderIdentifier),
+			$this->getFolderByIdentifier($parentFolderIdentifier),
 			$stream
 		)->getId();
 	}

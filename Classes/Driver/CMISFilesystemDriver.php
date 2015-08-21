@@ -149,10 +149,14 @@ class CMISFilesystemDriver extends AbstractHierarchicalFilesystemDriver implemen
 		$value = NULL;
 		if (isset($map[$property])) {
 			$value = $object->getPropertyValue($map[$property]);
-			if (in_array($property, $dates) && $value instanceof \DateTime) {
-				$value = $value->format('U');
+			if (in_array($property, $dates)) {
+				if ($value instanceof \DateTime) {
+					$value = $value->format('U');
+				} else {
+					$value = (integer) $value;
+				}
 			} elseif ($property === 'mimetype') {
-				$value = (string) $value;
+				$value = (string) ($value === NULL ? 'text/plain' : $value);
 			} elseif ($property === 'size') {
 				$value = (integer) $value;
 			}
@@ -296,7 +300,7 @@ class CMISFilesystemDriver extends AbstractHierarchicalFilesystemDriver implemen
 	 * @return FileableCmisObjectInterface
 	 */
 	public function getObjectByIdentifier($identifier, OperationContextInterface $context = NULL) {
-		$identifier = trim($identifier, '/');
+		$identifier = rtrim($identifier, '/');
 		if ($identifier === '') {
 			$identifier = $this->getRootLevelFolder();
 		} elseif (self::FOLDER_PROCESSED === $identifier) {
@@ -325,7 +329,7 @@ class CMISFilesystemDriver extends AbstractHierarchicalFilesystemDriver implemen
 	 * @return FileableCmisObjectInterface|NULL
 	 */
 	public function getObjectByPath($path, OperationContextInterface $context = NULL) {
-		$relativePath = trim($path, '/');
+		$relativePath = rtrim($path, '/');
 		$object = $this->getRootLevelFolderObject();
 		if (!empty($relativePath)) {
 			$segments = explode('/', (string) $relativePath);
