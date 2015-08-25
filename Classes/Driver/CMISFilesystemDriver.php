@@ -29,6 +29,7 @@ class CMISFilesystemDriver extends AbstractHierarchicalFilesystemDriver implemen
 	const FOLDER_DEFAULT = 'user_upload';
 	const FOLDER_TEMP = '_temp_';
 	const FOLDER_RECYCLER = '_recycler_';
+	const FOLDER_SHARED = 'Shared';
 
 	/** @var array */
 	protected $mappingFolderNameToRole = array(

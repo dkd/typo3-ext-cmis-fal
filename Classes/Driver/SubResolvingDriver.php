@@ -94,10 +94,16 @@ class SubResolvingDriver extends AbstractSubDriver {
 	 * @return string
 	 */
 	public function getRootLevelFolder() {
-		return $this->driver->getOption(
-			CMISFilesystemDriver::OPTION_FOLDER,
-			$this->driver->getSession()->getRootFolder()->getId()
-		);
+		$rootUuid = $this->driver->getOption(CMISFilesystemDriver::OPTION_FOLDER);
+		if (TRUE === empty($rootUuid)) {
+			foreach ($this->driver->getSession()->getRootFolder()->getChildren() as $rootChild) {
+				if (CMISFilesystemDriver::FOLDER_SHARED === $rootChild->getName()) {
+					$rootUuid = $rootChild->getId();
+					break;
+				}
+			}
+		}
+		return $rootUuid;
 	}
 
 	/**
