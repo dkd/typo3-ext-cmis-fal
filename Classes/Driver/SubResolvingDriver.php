@@ -103,6 +103,11 @@ class SubResolvingDriver extends AbstractSubDriver {
 				}
 			}
 		}
+		if (TRUE === empty($rootUuid)) {
+			throw new \RuntimeException(
+				'Could not resolve root folder! The "Shared" folder could not be found and no custom folder was defined.'
+			);
+		}
 		return $rootUuid;
 	}
 

@@ -325,6 +325,12 @@ class CMISFilesystemDriver extends AbstractHierarchicalFilesystemDriver implemen
 	 * emulated file system path of parent identifiers
 	 * separated by slashes.
 	 *
+	 * Note: method body is a temporary substitution for
+	 * the `getByPath` method on php-cmis-client's
+	 * Session object which will serve the same function
+	 * and throw the same Exception. We emulate it here
+	 * because it is not yet implemented there.
+	 *
 	 * @param string $path
 	 * @param OperationContextInterface|NULL $context
 	 * @return FileableCmisObjectInterface|NULL
@@ -337,6 +343,9 @@ class CMISFilesystemDriver extends AbstractHierarchicalFilesystemDriver implemen
 			foreach ($segments as $segment) {
 				$object = $this->getChildByName($object, $segment, $context);
 			}
+		}
+		if (NULL === $object) {
+			throw new CmisObjectNotFoundException('Object not found by path: ' . $path);
 		}
 		return $object;
 	}
