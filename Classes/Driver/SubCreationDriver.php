@@ -1,6 +1,7 @@
 <?php
 namespace Dkd\CmisFal\Driver;
 
+use Dkd\CmisService\Constants;
 use Dkd\PhpCmis\Exception\CmisContentAlreadyExistsException;
 use Dkd\PhpCmis\PropertyIds;
 use GuzzleHttp\Stream\Stream;
@@ -72,7 +73,13 @@ class SubCreationDriver extends AbstractSubDriver {
 		return $this->driver->getSession()->createDocument(
 			array(
 				PropertyIds::NAME => $fileName,
-				PropertyIds::OBJECT_TYPE_ID => 'cmis:document'
+				PropertyIds::OBJECT_TYPE_ID => Constants::CMIS_DOCUMENT_TYPE_FILE,
+				PropertyIds::SECONDARY_OBJECT_TYPE_IDS => array(
+					Constants::CMIS_DOCUMENT_TYPE_MAIN_ASPECT
+				),
+				Constants::CMIS_PROPERTY_RAWDATA => $parentFolderIdentifier . '/' . $fileName,
+				Constants::CMIS_PROPERTY_TYPO3TABLE => 'sys_file',
+				Constants::CMIS_PROPERTY_TYPO3UID => 0
 			),
 			$this->getFolderByIdentifier($parentFolderIdentifier),
 			$stream
