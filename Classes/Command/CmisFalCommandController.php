@@ -2,6 +2,8 @@
 namespace Dkd\CmisFal\Command;
 
 use Dkd\CmisFal\Service\CmisFalService;
+use Dkd\CmisFal\Task\FileRelationIndexTask;
+use Dkd\CmisService\Factory\CmisObjectFactory;
 use Dkd\CmisService\Factory\QueueFactory;
 use Dkd\CmisService\Factory\WorkerFactory;
 use Dkd\CmisService\Task\InitializationTask;
@@ -79,10 +81,45 @@ class CmisFalCommandController extends CommandController {
 	}
 
 	/**
+	 * Generate file usage indexing tasks
+	 *
+	 * Generates Tasks for the EXT:cmis_service queue to
+	 * process; iterates through the file tree starting from
+	 * the configured root folder, checking each CMIS object
+	 *
+	 * @return void
+	 */
+	public function generateIndexingTasksCommand() {
+		$storageUid = $this->cmisFalService->resolveStorageRecord(FALSE, FALSE);
+		if (!$storageUid) {
+			throw new \RuntimeException(
+				'Storage is not configured - please either configure it manually or run the "initialize" command'
+			);
+		}
+		$queue = $this->getQueueFactory()->fetchQueue();
+		$relationRecords = $this->cmisFalService->getFileReferenceRecordsForAllFilesInStorage($storageUid);
+		foreach ($relationRecords as $relationRecord) {
+			$fileRelationIndexingTask = new FileRelationIndexTask();
+			$fileRelationIndexingTask->setParameter(FileRelationIndexTask::OPTION_SOURCE_TABLE, $relationRecord['table_local']);
+			$fileRelationIndexingTask->setParameter(FileRelationIndexTask::OPTION_SOURCE_FIELD, $relationRecord['fieldname']);
+			$fileRelationIndexingTask->setParameter(FileRelationIndexTask::OPTION_SOURCE_UID, $relationRecord['uid_local']);
+			$fileRelationIndexingTask->setParameter(FileRelationIndexTask::OPTION_TARGET_FILE_UUID, $relationRecord['identifier']);
+			$queue->add($fileRelationIndexingTask);
+		}
+	}
+
+	/**
 	 * @return WorkerFactory
 	 */
 	protected function getWorkerFactory() {
 		return new WorkerFactory();
+	}
+
+	/**
+	 * @return QueueFactory
+	 */
+	protected function getQueueFactory() {
+		return new QueueFactory();
 	}
 
 }

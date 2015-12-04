@@ -54,6 +54,23 @@ class CmisFalService implements SingletonInterface {
 	}
 
 	/**
+	 * Gets all sys_file_reference records pointing to any file
+	 * contained within the storage identified by $storageUid.
+	 * Each record contains information required to fetch the
+	 * source side of the relation.
+	 *
+	 * @param integer $storageUid
+	 * @return array
+	 */
+	public function getFileReferenceRecordsForAllFilesInStorage($storageUid) {
+		return $this->getDatabaseConnection()->exec_SELECTgetRows(
+			'r.*, f.identifier',
+			'sys_file f, sys_file_reference r',
+			sprintf('f.storage = %d AND f.uid = r.uid_foreign AND r.deleted = 0 AND r.hidden = 0', $storageUid)
+		);
+	}
+
+	/**
 	 * Gets/creates mandatory, root-level sys_file_storage record
 	 * that is needed for accessing the CMIS repository via FAL.
 	 * Returns the created or resolved UID of the storage. If
