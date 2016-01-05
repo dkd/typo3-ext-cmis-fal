@@ -167,9 +167,19 @@ class SubResolvingDriver extends AbstractSubDriver {
 	 * @param integer $items
 	 * @param boolean $recurse
 	 * @param array $callbacks callbacks for filtering the items
+	 * @param string $sort
+	 * @param boolean $sortRev
 	 * @return array of FileIdentifiers
 	 */
-	public function getFilesInFolder($folderIdentifier, $start = 0, $items = 0, $recurse = FALSE, array $callbacks = array()) {
+	public function getFilesInFolder(
+		$folderIdentifier,
+		$start = 0,
+		$items = 0,
+		$recurse = FALSE,
+		array $callbacks = array(),
+		$sort = '',
+		$sortRev = FALSE
+	) {
 		return $this->driver->getChildIdentifiers(
 			$this->getFolderByIdentifier($folderIdentifier),
 			BaseTypeId::cast(BaseTypeId::CMIS_DOCUMENT)
@@ -184,9 +194,19 @@ class SubResolvingDriver extends AbstractSubDriver {
 	 * @param integer $items
 	 * @param boolean $recurse
 	 * @param array $callbacks callbacks for filtering the items
+	 * @param string $sort
+	 * @param boolean $sortRev
 	 * @return array of Folder Identifier
 	 */
-	public function getFoldersInFolder($folderIdentifier, $start = 0, $items = 0, $recurse = FALSE, array $callbacks = array()) {
+	public function getFoldersInFolder(
+		$folderIdentifier,
+		$start = 0,
+		$items = 0,
+		$recurse = FALSE,
+		array $callbacks = array(),
+		$sort = '',
+		$sortRev = FALSE
+	) {
 		return $this->driver->getChildIdentifiers(
 			$this->getFolderByIdentifier($folderIdentifier),
 			BaseTypeId::cast(BaseTypeId::CMIS_FOLDER)

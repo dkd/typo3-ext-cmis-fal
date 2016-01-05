@@ -7,11 +7,13 @@ use Dkd\PhpCmis\CmisObject\CmisObjectInterface;
 use Dkd\PhpCmis\Data\FileableCmisObjectInterface;
 use Dkd\PhpCmis\Data\FolderInterface;
 use Dkd\PhpCmis\Enum\BaseTypeId;
+use Dkd\PhpCmis\Enum\IncludeRelationships;
 use Dkd\PhpCmis\Exception\CmisObjectNotFoundException;
 use Dkd\PhpCmis\OperationContext;
 use Dkd\PhpCmis\OperationContextInterface;
 use Dkd\PhpCmis\PropertyIds;
 use Dkd\PhpCmis\SessionInterface;
+use TYPO3\CMS\Core\Database\PreparedStatement;
 use TYPO3\CMS\Core\Resource\Driver\AbstractHierarchicalFilesystemDriver;
 use TYPO3\CMS\Core\Resource\Driver\DriverInterface;
 use TYPO3\CMS\Core\Resource\Exception\FileOperationErrorException;
@@ -704,10 +706,28 @@ class CMISFilesystemDriver extends AbstractHierarchicalFilesystemDriver implemen
 	 * @param integer $items
 	 * @param boolean $recurse
 	 * @param array $callbacks callbacks for filtering the items
+	 * @param string $sort
+	 * @param boolean $sortRev
 	 * @return array of FileIdentifiers
 	 */
-	public function getFilesInFolder($folderIdentifier, $start = 0, $items = 0, $recurse = FALSE, array $callbacks = array()) {
-		return $this->getSubResolvingDriver()->getFilesInFolder($folderIdentifier, $start, $items, $recurse, $callbacks);
+	public function getFilesInFolder(
+		$folderIdentifier,
+		$start = 0,
+		$items = 0,
+		$recurse = FALSE,
+		array $callbacks = array(),
+		$sort = '',
+		$sortRev = FALSE
+	) {
+		return $this->getSubResolvingDriver()->getFilesInFolder(
+			$folderIdentifier,
+			$start,
+			$items,
+			$recurse,
+			$callbacks,
+			$sort,
+			$sortRev
+		);
 	}
 
 	/**
@@ -718,10 +738,28 @@ class CMISFilesystemDriver extends AbstractHierarchicalFilesystemDriver implemen
 	 * @param integer $items
 	 * @param boolean $recurse
 	 * @param array $callbacks callbacks for filtering the items
+	 * @param string $sort
+	 * @param boolean $sortRev
 	 * @return array of Folder Identifier
 	 */
-	public function getFoldersInFolder($folderIdentifier, $start = 0, $items = 0, $recurse = FALSE, array $callbacks = array()) {
-		return $this->getSubResolvingDriver()->getFoldersInFolder($folderIdentifier, $start, $items, $recurse, $callbacks);
+	public function getFoldersInFolder(
+		$folderIdentifier,
+		$start = 0,
+		$items = 0,
+		$recurse = FALSE,
+		array $callbacks = array(),
+		$sort = '',
+		$sortRev = FALSE
+	) {
+		return $this->getSubResolvingDriver()->getFoldersInFolder(
+			$folderIdentifier,
+			$start,
+			$items,
+			$recurse,
+			$callbacks,
+			$sort,
+			$sortRev
+		);
 	}
 
 	/**
@@ -762,6 +800,75 @@ class CMISFilesystemDriver extends AbstractHierarchicalFilesystemDriver implemen
 	 */
 	public function getPublicUrl($identifier) {
 		return $this->getSubResolvingDriver()->getPublicUrl($identifier);
+	}
+
+	/**
+	 * Returns the identifier of a file inside the folder
+	 *
+	 * @param string $fileName
+	 * @param string $folderIdentifier
+	 * @return string file identifier
+	 */
+	public function getFileInFolder($fileName, $folderIdentifier) {
+		$session = $this->getSession();
+		return $session->getObject($session->createObjectId($folderIdentifier))->getPath() . '/' . $fileName;
+	}
+
+	/**
+	 * Returns the identifier of a folder inside the folder
+	 *
+	 * @param string $folderName The name of the target folder
+	 * @param string $folderIdentifier
+	 * @return string folder identifier
+	 */
+	public function getFolderInFolder($folderName, $folderIdentifier) {
+		$session = $this->getSession();
+		return $session->getObject($session->createObjectId($folderIdentifier))->getPath() . '/' . $folderName;
+	}
+
+	/**
+	 * Returns the number of files inside the specified path
+	 *
+	 * @param string $folderIdentifier
+	 * @param boolean $recursive
+	 * @param array $filenameFilterCallbacks callbacks for filtering the items
+	 * @return integer Number of files in folder
+	 */
+	public function countFilesInFolder($folderIdentifier, $recursive = FALSE, array $filenameFilterCallbacks = array()) {
+		return $this->countObjectsOfTypeInFolder('cmis:document', $folderIdentifier, $recursive);
+	}
+
+	/**
+	 * Returns the number of folders inside the specified path
+	 *
+	 * @param string $folderIdentifier
+	 * @param boolean $recursive
+	 * @param array $folderNameFilterCallbacks callbacks for filtering the items
+	 * @return integer Number of folders in folder
+	 */
+	public function countFoldersInFolder($folderIdentifier, $recursive = FALSE, array $folderNameFilterCallbacks = array()) {
+		return $this->countObjectsOfTypeInFolder('cmis:folder', $folderIdentifier, $recursive);
+	}
+
+	/**
+	 * @param string $objectTypeId
+	 * @param string $folderIdentifier
+	 * @param boolean $recursive
+	 * @return integer
+	 */
+	protected function countObjectsOfTypeInFolder($objectTypeId, $folderIdentifier, $recursive = FALSE) {
+		$session = $this->getSession();
+		$context = $session->createOperationContext(
+			array(PropertyIds::OBJECT_TYPE_ID => $objectTypeId, PropertyIds::PARENT_ID => $folderIdentifier),
+			FALSE,
+			FALSE,
+			FALSE,
+			IncludeRelationships::cast(IncludeRelationships::NONE),
+			array(),
+			FALSE
+		);
+		$result = $session->query(sprintf('SELECT cmis:objectId FROM %s', $objectTypeId), FALSE, $context);
+		return count($result);
 	}
 
 	// ------------- Factory wrappers ------------- //

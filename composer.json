@@ -18,6 +18,7 @@
         }
     ],
     "require": {
+        "typo3/cms": "^7.6",
         "dkd/cmis-service": "dev-master"
     },
     "autoload": {
@@ -26,8 +27,6 @@
         }
     },
     "require-dev": {
-        "dkd/php-cmis": "dev-master",
-        "typo3/cms": ">=6.2.11",
         "squizlabs/php_codesniffer": "1.*",
         "phpunit/phpunit": "4.2.*",
         "typo3-ci/typo3sniffpool": "*",
