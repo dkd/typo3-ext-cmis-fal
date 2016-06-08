@@ -7,19 +7,24 @@
     "license": "GPL-2.0",
     "authors": [
         {
+            "name": "Claus Due",
+            "homepage": "http://www.dkd.de",
+            "role": "Developer"
+        },
+        {
             "name": "Sascha Egerer",
             "homepage": "http://www.dkd.de",
             "role": "Developer"
         },
         {
-            "name": "Claus Due",
+            "name": "Johannes Goslar",
             "homepage": "http://www.dkd.de",
             "role": "Developer"
         }
     ],
     "require": {
         "typo3/cms": "^7.6",
-        "dkd/cmis-service": "dev-master"
+        "dkd/cmis-service": "~1.0"
     },
     "autoload": {
         "psr-4": {
