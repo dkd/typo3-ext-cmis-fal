@@ -25,9 +25,12 @@ class RootFolderSelectorFiller {
 	public function processItems(array $parameters) {
 		$initializer = new Initialization();
 		$initializer->start();
-		$serverName = $this->getFlexFormValue($parameters['row']['configuration'], 'repository');
-		$parameters['items'][] = array('- select a root folder -', NULL);
-		if (!empty($serverName)) {
+        $parameters['items'][] = array('- select a root folder -', NULL);
+
+        //$serverName = $this->getFlexFormValue($parameters['row']['configuration'], 'repository');
+        $serverName = $parameters['row']['repository'][0];
+
+        if (!empty($serverName)) {
 			$context = $this->getSession($serverName)->getDefaultContext();
 			$context->setFilter(array(PropertyIds::NAME));
 			foreach ($this->getSession($serverName)->getRootFolder($context)->getChildren() as $folder) {
@@ -41,18 +44,18 @@ class RootFolderSelectorFiller {
 		}
 	}
 
-	/**
-	 * Simple alternative FlexForm XML parsing routine that
-	 * only supports the basic structure used in our FlexForm.
-	 *
-	 * @param string $xml
-	 * @param string $valueName
-	 * @return mixed
-	 */
-	protected function getFlexFormValue($xml, $valueName) {
-		$xmlObject = new \SimpleXMLIterator($xml);
-		return (string) reset($xmlObject->xpath(sprintf('//field[@index="%s"]/value[@index="vDEF"]', $valueName)));
-	}
+	// /**
+	//  * Simple alternative FlexForm XML parsing routine that
+	//  * only supports the basic structure used in our FlexForm.
+	//  *
+	//  * @param string $xml
+	//  * @param string $valueName
+	//  * @return mixed
+	//  */
+	// protected function getFlexFormValue($xml, $valueName) {
+	// 	$xmlObject = new \SimpleXMLIterator($xml);
+	// 	return (string) reset($xmlObject->xpath(sprintf('//field[@index="%s"]/value[@index="vDEF"]', $valueName)));
+	// }
 
 	/**
 	 * Get the CMIS session configured via EXT:cmis_service.
