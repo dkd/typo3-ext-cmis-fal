@@ -867,7 +867,7 @@ class CMISFilesystemDriver extends AbstractHierarchicalFilesystemDriver implemen
 			array(),
 			FALSE
 		);
-		$result = $session->query(sprintf('SELECT cmis:objectId FROM %s', $objectTypeId), FALSE, $context);
+		$result = $session->query(sprintf('SELECT cmis:objectId FROM %s WHERE in_folder(\'%s\')', $objectTypeId, $folderIdentifier), FALSE, $context);
 		return count($result);
 	}
 
