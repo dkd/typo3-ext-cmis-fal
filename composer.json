@@ -23,9 +23,17 @@
             "role": "Developer"
         }
     ],
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/dkd/typo3-ext-cmis-service.git"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
         "typo3/cms": "^7.6",
-        "dkd/cmis-service": "^1.0"
+        "dkd/cmis-service": "~2.0"
     },
     "autoload": {
         "psr-4": {
@@ -38,10 +46,9 @@
         "typo3-ci/typo3sniffpool": "*",
         "typo3-ci/typo3cms": "*"
     },
-    "repositories": [
-        {
-            "type": "git",
-            "url": "https://github.com/dkd/typo3-ext-cmis-service.git"
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.x-dev"
         }
-    ]
+    }
 }
