@@ -1,6 +1,5 @@
 {
     "name": "dkd/cmis-fal",
-    "verion": "1.0.0",
     "type": "typo3-cms-extension",
     "description": "TYPO3 Extension CMIS FAL Driver",
     "keywords": ["fal", "cmis", "typo3"],
@@ -23,17 +22,11 @@
             "role": "Developer"
         }
     ],
-    "repositories": [
-        {
-            "type": "git",
-            "url": "https://github.com/dkd/typo3-ext-cmis-service.git"
-        }
-    ],
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "typo3/cms": "^7.6",
-        "dkd/cmis-service": "~2.0"
+        "typo3/cms": "^7.6|^8",
+        "dkd/cmis-service": "^2"
     },
     "autoload": {
         "psr-4": {
