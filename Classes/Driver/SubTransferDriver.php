@@ -26,7 +26,8 @@ class SubTransferDriver extends AbstractSubDriver {
 	public function getFileContents($fileIdentifier) {
 	    /** @var SessionInterface $session */
 		$session = $this->driver->getSession();
-		return $session->getContentStream($session->createObjectId($fileIdentifier))->getContents();
+		$stream = $session->getContentStream($session->createObjectId($fileIdentifier));
+		return $stream ? $stream->getContents() : null;
 	}
 
 	/**
