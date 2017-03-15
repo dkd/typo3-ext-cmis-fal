@@ -4,8 +4,8 @@ namespace Dkd\CmisFal\Service;
 use Dkd\CmisService\Service\CmisService;
 use Dkd\PhpCmis\Exception\CmisObjectNotFoundException;
 use Dkd\PhpCmis\PropertyIds;
-use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Database\DatabaseConnection;
+use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
