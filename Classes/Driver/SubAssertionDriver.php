@@ -1,7 +1,6 @@
 <?php
 namespace Dkd\CmisFal\Driver;
 
-use Dkd\PhpCmis\CmisObject\CmisObjectInterface;
 use Dkd\PhpCmis\Data\DocumentInterface;
 use Dkd\PhpCmis\Data\FolderInterface;
 use Dkd\PhpCmis\Exception\CmisObjectNotFoundException;

@@ -1,10 +1,10 @@
 <?php
 namespace Dkd\CmisFal\Driver;
 
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use Dkd\PhpCmis\Data\DocumentInterface;
+use Dkd\PhpCmis\SessionInterface;
 use GuzzleHttp\Stream\Stream;
-use GuzzleHttp\Stream\StreamInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class SubTransferDriver
@@ -24,6 +24,7 @@ class SubTransferDriver extends AbstractSubDriver {
 	 * @return string The file contents
 	 */
 	public function getFileContents($fileIdentifier) {
+	    /** @var SessionInterface $session */
 		$session = $this->driver->getSession();
 		return $session->getContentStream($session->createObjectId($fileIdentifier))->getContents();
 	}
@@ -36,7 +37,6 @@ class SubTransferDriver extends AbstractSubDriver {
 	 * @return integer The number of bytes written to the file
 	 */
 	public function setFileContents($fileIdentifier, $contents) {
-		$session = $this->driver->getSession();
 		/** @var DocumentInterface $object */
 		$object = $this->driver->getObjectByIdentifier($fileIdentifier);
 		$object->setContentStream(Stream::factory($contents), TRUE);

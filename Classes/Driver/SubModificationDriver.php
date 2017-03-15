@@ -1,11 +1,10 @@
 <?php
 namespace Dkd\CmisFal\Driver;
 
-use Dkd\PhpCmis\Enum\BaseTypeId;
-use Dkd\PhpCmis\PropertyIds;
 use Dkd\PhpCmis\Data\DocumentInterface;
 use Dkd\PhpCmis\Data\FolderInterface;
-use Dkd\PhpCmis\Data\FileableCmisObjectInterface;
+use Dkd\PhpCmis\Enum\BaseTypeId;
+use Dkd\PhpCmis\PropertyIds;
 use GuzzleHttp\Stream\Stream;
 
 /**
