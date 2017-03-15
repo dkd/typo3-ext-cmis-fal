@@ -1,6 +1,7 @@
 <?php
 namespace Dkd\CmisFal\Driver;
 
+use Dkd\CmisFal\Driver\Versioned\AbstractSharedCMISFilesystemDriver;
 use Dkd\PhpCmis\Data\DocumentInterface;
 use Dkd\PhpCmis\Data\FolderInterface;
 use Dkd\PhpCmis\Enum\Action;
@@ -95,10 +96,10 @@ class SubResolvingDriver extends AbstractSubDriver {
 	 * @return string
 	 */
 	public function getRootLevelFolder() {
-		$rootUuid = $this->driver->getOption(CMISFilesystemDriver::OPTION_FOLDER);
+		$rootUuid = $this->driver->getOption(AbstractSharedCMISFilesystemDriver::OPTION_FOLDER);
 		if (TRUE === empty($rootUuid)) {
 			foreach ($this->driver->getSession()->getRootFolder()->getChildren() as $rootChild) {
-				if (CMISFilesystemDriver::FOLDER_SHARED === $rootChild->getName()) {
+				if (AbstractSharedCMISFilesystemDriver::FOLDER_SHARED === $rootChild->getName()) {
 					$rootUuid = $rootChild->getId();
 					break;
 				}
@@ -119,10 +120,10 @@ class SubResolvingDriver extends AbstractSubDriver {
 	 */
 	public function getDefaultFolder() {
 		try {
-			$identifier = $this->driver->getObjectByPath(CMISFilesystemDriver::FOLDER_DEFAULT)->getId();
+			$identifier = $this->driver->getObjectByPath(AbstractSharedCMISFilesystemDriver::FOLDER_DEFAULT)->getId();
 		} catch (CmisObjectNotFoundException $error) {
 			$rootId = $this->driver->getRootLevelFolder();
-			$identifier = $this->driver->createFolder(CMISFilesystemDriver::FOLDER_DEFAULT, $rootId);
+			$identifier = $this->driver->createFolder(AbstractSharedCMISFilesystemDriver::FOLDER_DEFAULT, $rootId);
 		}
 		return $identifier;
 	}
@@ -146,6 +147,7 @@ class SubResolvingDriver extends AbstractSubDriver {
 	 * Returns information about a folder.
 	 *
 	 * @param string $folderIdentifier
+     * @throws FolderDoesNotExistException
 	 * @return array
 	 */
 	public function getFolderInfoByIdentifier($folderIdentifier) {

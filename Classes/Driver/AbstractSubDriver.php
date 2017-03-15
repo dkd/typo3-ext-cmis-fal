@@ -23,14 +23,14 @@ abstract class AbstractSubDriver {
 	protected $configuration = array();
 
 	/**
-	 * @var CMISFilesystemDriver
+	 * @var CMISFilesystemDriverInterface
 	 */
 	protected $driver;
 
 	/**
-	 * @param CMISFilesystemDriver
+	 * @param CMISFilesystemDriverInterface $driver
 	 */
-	public function __construct(CMISFilesystemDriver $driver) {
+	public function __construct(CMISFilesystemDriverInterface $driver) {
 		$this->driver = $driver;
 	}
 
