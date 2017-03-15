@@ -25,7 +25,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "typo3/cms": "^7.6|^8",
+        "typo3/cms": "^6.2|^7.6|^8",
         "dkd/cmis-service": "^2"
     },
     "autoload": {
