@@ -66,6 +66,19 @@ abstract class AbstractSharedCMISFilesystemDriver extends AbstractHierarchicalFi
         return $this->storageUid;
     }
 
+    protected $processingFolder = null;
+
+    public function setStorageUid($storageUid)
+    {
+        parent::setStorageUid($storageUid);
+        $row = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow('*', 'sys_file_storage', "uid='" . (integer) $this->getStorageUid() . "'");
+        if (empty($row['processingfolder'])) {
+            $this->processingFolder =  self::FOLDER_PROCESSED;
+        } else {
+            $this->processingFolder = \end(\explode(':', $row['processingfolder']));
+        }
+    }
+
     /**
      * Processes the configuration for this driver.
      *
@@ -689,6 +702,9 @@ abstract class AbstractSharedCMISFilesystemDriver extends AbstractHierarchicalFi
      * @return boolean TRUE if $content is within or matches $folderIdentifier
      */
     public function isWithin($folderIdentifier, $identifier) {
+        if (strpos($folderIdentifier, $this->processingFolder) !== false) {
+            return false;
+        }
         return $this->getSubAssertionDriver()->isWithin($folderIdentifier, $identifier);
     }
 
