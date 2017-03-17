@@ -35,7 +35,12 @@ class RootFolderSelectorFiller {
 		if (!empty($serverName)) {
 			$context = $this->getSession($serverName)->getDefaultContext();
 			$context->setFilter(array(PropertyIds::NAME));
-			foreach ($this->getSession($serverName)->getRootFolder($context)->getChildren() as $folder) {
+            $rootFolder = $this->getSession($serverName)->getRootFolder($context);
+            $parameters['items'][] = array(
+                $rootFolder->getName(),
+                $rootFolder->getId()
+            );
+			foreach ($rootFolder->getChildren() as $folder) {
 				if ($folder instanceof FolderInterface) {
 					$parameters['items'][] = array(
 						$folder->getName(),
