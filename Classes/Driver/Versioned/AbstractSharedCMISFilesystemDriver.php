@@ -204,12 +204,19 @@ abstract class AbstractSharedCMISFilesystemDriver extends AbstractHierarchicalFi
      * @return FolderInterface
      */
     public function getProcessedFilesFolderObject() {
-        $session = $this->getSession();
-        $processedFolder = $this->getChildByName($this->getRootLevelFolderObject(), self::FOLDER_PROCESSED);
-        if ($processedFolder === NULL) {
-            $identifier = $this->createFolder(self::FOLDER_PROCESSED, $this->getRootLevelFolder());
-            $processedFolder = $session->getObject($session->createObjectId($identifier));
+        if ($this->processingFolder === self::FOLDER_PROCESSED) {
+            $session = $this->getSession();
+            $processedFolder = $this->getChildByName($this->getRootLevelFolderObject(), self::FOLDER_PROCESSED);
+            if ($processedFolder === NULL) {
+                $identifier = $this->createFolder(self::FOLDER_PROCESSED, $this->getRootLevelFolder());
+                $processedFolder = $session->getObject($session->createObjectId($identifier));
+            }
+        } else {
+            $resourceFactory = \TYPO3\CMS\Core\Resource\ResourceFactory::getInstance();
+            $storage = $resourceFactory->getStorageObject(1);
+            $processedFolder = $storage->getFolder($this->processingFolder);
         }
+
         return $processedFolder;
     }
 
