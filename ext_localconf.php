@@ -19,5 +19,9 @@ defined('TYPO3_MODE') or die('Access denied');
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['extbase']['commandControllers'][]
         = \Dkd\CmisFal\Command\CmisFalCommandController::class;
 
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Core\\Resource\\Index\\Indexer'] = array(
+        'className' => 'Dkd\\CmisFal\\Xclass\\Indexer'
+    );
+
 })();
 

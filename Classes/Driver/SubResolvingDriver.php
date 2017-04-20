@@ -6,6 +6,7 @@ use Dkd\PhpCmis\Data\DocumentInterface;
 use Dkd\PhpCmis\Data\FolderInterface;
 use Dkd\PhpCmis\Enum\Action;
 use Dkd\PhpCmis\Enum\BaseTypeId;
+use Dkd\PhpCmis\OperationContext;
 use Dkd\PhpCmis\Exception\CmisObjectNotFoundException;
 use TYPO3\CMS\Core\Resource\Exception\FileDoesNotExistException;
 use TYPO3\CMS\Core\Resource\Exception\FolderDoesNotExistException;
@@ -136,11 +137,14 @@ class SubResolvingDriver extends AbstractSubDriver {
 	 * @return array
 	 */
 	public function getFileInfoByIdentifier($fileIdentifier, array $propertiesToExtract = array()) {
-		$object = $this->driver->getObjectByIdentifier($fileIdentifier);
-		if (!$object instanceof DocumentInterface) {
-			throw new \InvalidArgumentException('File ' . $fileIdentifier . ' does not exist.', 1314516809);
-		}
-		return $this->driver->extractFileInformation($object, $propertiesToExtract);
+        $context = new OperationContext();
+        $context->setCacheEnabled(true);
+        $context->setFilterString('*');
+        $object = $this->driver->getObjectByIdentifier($fileIdentifier, $context);
+        if (!$object instanceof DocumentInterface) {
+            throw new \InvalidArgumentException('File ' . $fileIdentifier . ' does not exist.', 1314516809);
+        }
+        return $this->driver->extractFileInformation($object, $propertiesToExtract);
 	}
 
 	/**
